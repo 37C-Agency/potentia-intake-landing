@@ -1,0 +1,83 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import { BENEFITS } from '@/lib/site-content';
+
+interface Props { blok?: any }
+const { blok } = Astro.props;
+const headline = blok?.headline ?? BENEFITS.headline;
+const subline = blok?.subline ?? BENEFITS.subline;
+const items = blok?.items ?? BENEFITS.items;
+const ctaLabel = blok?.cta_label ?? BENEFITS.ctaLabel;
+const editable = blok ? storyblokEditable(blok) : {};
+---
+
+<section {...editable} class="section-pad bg-bone">
+  <div class="container-page">
+    <div class="reveal max-w-3xl mb-10 sm:mb-16">
+      <p class="eyebrow text-text-muted mb-3">The change</p>
+      <h2 class="font-display text-h2 text-navy">{headline}</h2>
+      {subline && (
+        <p class="mt-4 text-base sm:text-body-lg text-navy/70 leading-relaxed max-w-2xl">{subline}</p>
+      )}
+    </div>
+
+    <div class="space-y-14 sm:space-y-20 md:space-y-28">
+      {items.map((item: any, idx: number) => (
+        <article class={`grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-14 items-center ${idx % 2 === 1 ? 'lg:[&>*:first-child]:order-2' : ''}`}>
+          <div class={`reveal lg:col-span-5`}>
+            <div class="aspect-[4/3] sm:aspect-[4/5] bg-mist rounded-xl sm:rounded-2xl overflow-hidden">
+              <img
+                src={item.image}
+                alt={item.imageAlt}
+                width="800"
+                height="1000"
+                loading="lazy"
+                decoding="async"
+                class="object-cover h-full w-full"
+              />
+            </div>
+          </div>
+          <div class={`reveal reveal-delay-1 lg:col-span-7`}>
+            <p class="font-display font-bold text-fresh-green tabular text-xl sm:text-2xl md:text-3xl mb-3 sm:mb-4">0{idx + 1}</p>
+            <h3 class="font-display text-xl sm:text-2xl md:text-3xl text-navy font-bold mb-3 sm:mb-5 leading-tight max-w-xl">
+              {item.title}
+            </h3>
+            <p class="text-base sm:text-body-lg text-navy/80 leading-relaxed max-w-prose" set:html={item.body} />
+
+            {item.change && (
+              <div class="mt-6 sm:mt-7 max-w-md space-y-2.5">
+                <div class="flex items-center gap-3">
+                  <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-navy/8 text-navy/45 shrink-0" aria-hidden="true">
+                    <svg width="11" height="11" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                      <line x1="4" y1="4" x2="14" y2="14" />
+                      <line x1="14" y1="4" x2="4" y2="14" />
+                    </svg>
+                  </span>
+                  <span class="text-sm sm:text-[15px] text-navy/45 line-through decoration-1">{item.change.before}</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-fresh-green/15 text-fresh-green shrink-0" aria-hidden="true">
+                    <svg width="11" height="11" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 9 7 13 15 5" />
+                    </svg>
+                  </span>
+                  <span class="text-sm sm:text-[15px] text-navy font-semibold">{item.change.after}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="reveal mt-12 sm:mt-20 text-center">
+      <a href="#hero-form" class="btn-primary inline-flex items-center justify-center gap-2 text-[15px] md:text-[17px]" data-cta="benefits">
+        {ctaLabel}
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="9" x2="14" y2="9" />
+          <polyline points="9 4 14 9 9 14" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>

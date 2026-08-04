@@ -1,0 +1,307 @@
+---
+import '@/styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import { SITE, FAQ } from '@/lib/site-content';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = 'Premium Mental Health Care in Dubai. Potentia Clinics.',
+  description = 'Private 50-minute consultations with DHA-licensed clinical psychologists and psychiatrists at our Dubai Science Park clinic. In person, confidential. Reply within 24 hours.',
+  ogImage = '/images/generated/og-potentia.webp',
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? `https://${SITE.domain}`).toString();
+
+// Schema.org — MedicalClinic (LocalBusiness subtype) + AggregateRating
+const localBusinessLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalClinic',
+  '@id': `https://${SITE.domain}#org`,
+  name: SITE.name,
+  legalName: SITE.legalName,
+  url: `https://${SITE.domain}`,
+  description,
+  email: SITE.email,
+  telephone: SITE.phone,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Dubai Science Park, DSP HQ South Tower, 2nd Floor, 201',
+    addressLocality: 'Dubai',
+    addressCountry: 'AE',
+  },
+  areaServed: [
+    { '@type': 'AdministrativeArea', name: 'Dubai' },
+    { '@type': 'Country', name: 'United Arab Emirates' },
+  ],
+  medicalSpecialty: ['Psychology', 'Psychiatry', 'Nutrition'],
+  ...(SITE.googleReviewsCount > 0 && {
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: SITE.googleRating,
+      reviewCount: SITE.googleReviewsCount,
+    },
+  }),
+  sameAs: [SITE.social.instagram],
+};
+
+// Schema.org — Service
+const serviceLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'Clinical Psychology and Psychiatry',
+  provider: { '@id': `https://${SITE.domain}#org` },
+  areaServed: { '@type': 'Country', name: 'United Arab Emirates' },
+  description: 'Private 50-minute clinical psychology and psychiatry consultations at Potentia Clinics in Dubai Science Park. CBT, ACT, EMDR, Schema Therapy. In-person sessions with DHA-licensed clinicians.',
+};
+
+// Schema.org — FAQ
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ.items.map((i) => ({
+    '@type': 'Question',
+    name: i.q,
+    acceptedAnswer: { '@type': 'Answer', text: i.a },
+  })),
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-5QTZXXSF');</script>
+    <!-- End Google Tag Manager -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#2D3D33" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site ?? `https://${SITE.domain}`).toString()} />
+    <meta property="og:locale" content="en_AE" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preload" as="image" href="/images/generated/hero-illustration-v2.webp" fetchpriority="high" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(localBusinessLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+
+    <ClientRouter />
+  </head>
+  <body class="bg-bone text-navy antialiased">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5QTZXXSF"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <slot />
+
+    <script>
+      // Refresh always reloads at the TOP of the page, never at the form (Dario 2026-07-13,
+      // global rule for every landing page). Two mechanisms cause the jump, both handled:
+      // 1. Anchor CTAs write #hero-form into the URL (ClientRouter pushState, so no
+      //    hashchange fires) - strip the hash right after any in-page anchor click.
+      // 2. Browser scroll restoration re-lands wherever the user was - force manual + top.
+      const stripHash = () => {
+        if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      };
+      document.addEventListener('click', (e) => {
+        const el = e.target instanceof Element ? e.target.closest('a[href*="#"]') : null;
+        if (el) setTimeout(stripHash, 60);
+      });
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      window.addEventListener('pageshow', () => {
+        stripHash();
+        window.scrollTo(0, 0);
+      });
+      stripHash();
+    </script>
+
+    <!-- Brand cursor trail — small stroked brand-mark that follows the cursor at
+         bottom-right offset, animated draw-in/draw-out loop. Does NOT replace the
+         cursor (preserves accessibility + SEO). Hidden on touch devices. -->
+    <div class="brand-cursor-trail" aria-hidden="true">
+      <svg viewBox="0 0 18 18" width="28" height="28">
+        <path
+          d="M9 1.5 L15 5 V13 L9 16.5 L3 13 V5 Z"
+          pathLength="100"
+          fill="none"
+          stroke="#B8C947"
+          stroke-width="1.75"
+          stroke-linejoin="round"
+          stroke-linecap="round"
+        />
+      </svg>
+    </div>
+    <style>
+      .brand-cursor-trail {
+        --brand-accent: #B8C947; /* per-client brand accent — drives the ink-flash fill */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 28px;
+        height: 28px;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0;
+        transform: translate3d(-100px, -100px, 0);
+        transition: opacity 250ms ease;
+        will-change: transform, opacity;
+      }
+      .brand-cursor-trail.is-visible { opacity: 0.9; }
+      .brand-cursor-trail svg {
+        display: block;
+        transform-origin: center;
+      }
+      .brand-cursor-trail svg path {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        animation: brandDrawLoop 3.2s ease-in-out infinite;
+      }
+      /* Click reaction — refined "press + ink absorb": icon scales down softly
+         like a pressed button, stroke thickens (tactile weight), fill briefly
+         absorbs brand color then releases. No rotation, all spring physics. */
+      .brand-cursor-trail.is-clicking svg {
+        animation: brandClickPress 480ms cubic-bezier(0.22, 1.4, 0.36, 1);
+      }
+      .brand-cursor-trail.is-clicking svg path {
+        animation:
+          brandDrawLoop 3.2s ease-in-out infinite,
+          brandClickInk 480ms ease-out;
+      }
+      @keyframes brandDrawLoop {
+        0%   { stroke-dashoffset: 100; opacity: 0; }
+        18%  { opacity: 1; }
+        50%  { stroke-dashoffset: 0; opacity: 1; }
+        82%  { opacity: 1; }
+        100% { stroke-dashoffset: -100; opacity: 0; }
+      }
+      @keyframes brandClickPress {
+        0%   { transform: scale(1);    }
+        35%  { transform: scale(0.86); }
+        65%  { transform: scale(1.04); }
+        100% { transform: scale(1);    }
+      }
+      @keyframes brandClickInk {
+        0%, 100% { stroke-width: 1.75; fill: transparent; }
+        35%      { stroke-width: 2.6;  fill: color-mix(in srgb, var(--brand-accent) 22%, transparent); }
+      }
+      @media (hover: none), (prefers-reduced-motion: reduce) {
+        .brand-cursor-trail { display: none; }
+      }
+    </style>
+    <script>
+      (function () {
+        const trail = document.querySelector('.brand-cursor-trail');
+        if (!trail || window.matchMedia('(hover: none)').matches) return;
+        let tx = 0, ty = 0, x = 0, y = 0;
+        const ease = 0.18;
+        function tick() {
+          x += (tx - x) * ease;
+          y += (ty - y) * ease;
+          trail.style.transform = `translate3d(${x + 18}px, ${y + 18}px, 0)`;
+          requestAnimationFrame(tick);
+        }
+        window.addEventListener('mousemove', (e) => {
+          tx = e.clientX;
+          ty = e.clientY;
+          trail.classList.add('is-visible');
+        });
+        document.addEventListener('mouseleave', () => trail.classList.remove('is-visible'));
+        // Click reaction — ripple ring + svg punch-bounce. Re-triggers cleanly on rapid clicks.
+        let clickTimer;
+        document.addEventListener('click', () => {
+          trail.classList.remove('is-clicking');
+          // Force reflow so the animation restarts on rapid successive clicks
+          void trail.offsetWidth;
+          trail.classList.add('is-clicking');
+          clearTimeout(clickTimer);
+          clickTimer = setTimeout(() => trail.classList.remove('is-clicking'), 600);
+        });
+        tick();
+      })();
+    </script>
+
+    <script>
+      // Reveal-on-scroll observer. Re-runs on astro:page-load (§74.1): ClientRouter
+      // swaps the DOM on in-site navigation without re-executing module scripts, so a
+      // one-shot observer leaves the second page stuck at opacity 0.
+      function initReveal() {
+        const els = document.querySelectorAll('.reveal:not(.is-visible)');
+        if (!els.length) return;
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '-80px 0px', threshold: 0 }
+        );
+        els.forEach((el) => observer.observe(el));
+      }
+      document.addEventListener('astro:page-load', initReveal);
+      initReveal();
+    </script>
+
+    <script is:inline src="/wa-lead-widget.js"></script>
+    <script is:inline>
+      if (location.pathname.indexOf('/intake') !== 0) {
+      WALeadWidget.init({
+        phone: "971527173080",
+        brand: { name: "Potentia", tagline: "We reply on WhatsApp in a few minutes", accent: "#4A6755", avatar: "/brand/potentia-icon.png" },
+        intro: "A few quick details and we will continue on WhatsApp.",
+        fields: [
+          { id: "name",    label: "Your name",                           type: "text",   required: true, placeholder: "Your name" },
+          { id: "profile", label: "What is going on for you right now?", type: "choice", required: true,
+            options: ["Anxiety or stress", "Low mood", "Relationship or family strain", "Something else"] },
+          { id: "when",    label: "How soon are you looking to start?",  type: "choice",
+            options: ["This week", "This month", "Just looking, not ready yet"],
+            disqualify: ["Just looking, not ready yet"] },
+          { id: "payment", label: "How are you planning to pay?",        type: "choice",
+            options: ["Pay and claim from insurance", "Paying out of pocket", "I have questions about this"] }
+        ],
+        message:
+          "Hi Potentia, my name is {{name}}.\n\n" +
+          "What I am dealing with: {{profile}}\n" +
+          "When: {{when}}\n" +
+          "Payment: {{payment}}\n\n" +
+          "I would like to book a consultation.",
+        disqualifyTitle: "We may not be the right fit right now",
+        disqualifyText: "When you are ready to take the next step, we will be here. Feel free to come back any time.",
+        lead: { event: "Lead", value: 500, currency: "AED" },
+        onComplete: function(data) {
+          fetch("https://script.google.com/macros/s/AKfycbwAwusYdStxeXdFdH8lZ9fjleraP_O2Ifan7qF57DDEgP96vXVDUU_m5xxbwZ0EyPyCXQ/exec", {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify(Object.assign({ source: "WhatsApp Button" }, data))
+          }).catch(function() {});
+        }
+      });
+      }
+    </script>
+  </body>
+</html>

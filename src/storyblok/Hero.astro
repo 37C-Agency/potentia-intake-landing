@@ -1,0 +1,228 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import { HERO, SITE } from '@/lib/site-content';
+
+interface Props { blok?: any }
+const { blok } = Astro.props;
+const sub = blok?.subhead ?? HERO.sub;
+const editable = blok ? storyblokEditable(blok) : {};
+---
+
+<!--
+  Hero — locked Waterclub skeleton with Potentia palette + hexagon brand mark.
+  Mobile-first: copy stack first, illustration second, CTA above the fold.
+-->
+<section
+  {...editable}
+  id="hero"
+  class="relative isolate overflow-hidden bg-bone"
+>
+  <!-- Backdrop: warm cream wash + soft sage glow on the right -->
+  <div
+    class="absolute inset-0 -z-10"
+    style="background: linear-gradient(180deg, #F2EFD9 0%, #FFFFFF 65%);"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="absolute -right-48 top-[-10%] h-[120%] w-[640px] -z-10 opacity-50 blur-3xl hidden lg:block"
+    style="background: radial-gradient(circle at center, rgba(74,103,85,0.22) 0%, rgba(74,103,85,0) 65%);"
+    aria-hidden="true"
+  ></div>
+
+  <div class="container-wide pt-5 sm:pt-10 md:pt-14 pb-12 sm:pb-20 md:pb-24">
+    <!--
+      Mobile order (controlled by CSS `order`):
+        1. Trust ribbon pills
+        2. Headline
+        3. Subheadline
+        4. Illustration
+        5. Stats strip
+        6. CTA buttons
+        7. Microproof line
+      Desktop (lg+): standard 7-col copy / 5-col image side-by-side.
+    -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-16 items-center">
+
+      <!-- LEFT — Promise stack + dense trust -->
+      <div class="lg:col-span-7 contents lg:block">
+        <!-- Pre-headline trust ribbon — all 3 visible at every size, side-by-side. Shorter labels on mobile so they fit in one row at 390px. -->
+        <div class="order-1 lg:order-none hidden lg:flex flex-nowrap items-center gap-1.5 sm:gap-2 mb-2 sm:mb-5 lg:mb-6 reveal">
+          <span class="inline-flex items-center gap-1 sm:gap-1.5 bg-fresh-blue/10 text-fresh-blue text-[9.5px] sm:text-[12px] font-bold uppercase tracking-[0.06em] sm:tracking-[0.12em] px-2 sm:px-3 py-1 sm:py-1.5 rounded-full whitespace-nowrap">
+            <svg width="10" height="10" class="sm:w-[11px] sm:h-[11px]" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true">
+              <path d="M9 1.5 L15 5 V13 L9 16.5 L3 13 V5 Z" />
+            </svg>
+            <span class="sm:hidden">Matched method</span>
+            <span class="hidden sm:inline">Matched-method therapy</span>
+          </span>
+          <span class="inline-flex items-center gap-1 sm:gap-1.5 bg-fresh-blue/10 text-fresh-blue text-[9.5px] sm:text-[12px] font-bold uppercase tracking-[0.06em] sm:tracking-[0.12em] px-2 sm:px-3 py-1 sm:py-1.5 rounded-full whitespace-nowrap">
+            <svg width="10" height="10" class="sm:w-[11px] sm:h-[11px]" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 1.5 C5.5 1.5 3 4 3 7.5 C3 11 9 16.5 9 16.5 S15 11 15 7.5 C15 4 12.5 1.5 9 1.5 Z" />
+              <circle cx="9" cy="7.5" r="2" />
+            </svg>
+            <span class="sm:hidden">DSP Dubai</span>
+            <span class="hidden sm:inline">Dubai Science Park</span>
+          </span>
+          <span class="inline-flex items-center gap-1 sm:gap-1.5 bg-fresh-blue/10 text-fresh-blue text-[9.5px] sm:text-[12px] font-bold uppercase tracking-[0.06em] sm:tracking-[0.12em] px-2 sm:px-3 py-1 sm:py-1.5 rounded-full whitespace-nowrap">
+            <svg width="10" height="10" class="sm:w-[11px] sm:h-[11px]" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="9" cy="6.5" r="2.6" />
+              <path d="M3.5 15 C3.5 11.5 6.2 9.8 9 9.8 C11.8 9.8 14.5 11.5 14.5 15" />
+            </svg>
+            <span class="sm:hidden">Same clinician</span>
+            <span class="hidden sm:inline">Same clinician each session</span>
+          </span>
+        </div>
+
+        <h1 class="order-2 lg:order-none font-display font-bold text-navy leading-[1.05] sm:leading-[1.02] tracking-[-0.025em] reveal text-[clamp(1.75rem,7vw,4.75rem)] max-w-none sm:max-w-[22ch]" style="text-wrap: balance;">
+          Start feeling <span class="hl-marker">like yourself</span> again and be happy.
+        </h1>
+
+        {/* Single flowing subheadline on every breakpoint (mobile bullets removed: too many icons competing with the trust ribbon). */}
+        <p class="block order-3 lg:order-none mt-3 sm:mt-6 text-[15px] sm:text-[18px] md:text-[19px] text-navy/75 leading-snug sm:leading-relaxed reveal max-w-xl" style="transition-delay: 150ms" set:html={sub} />
+
+
+        <!-- Stats — compact horizontal row on mobile, 3-card grid on lg+ -->
+        <div class="order-5 lg:order-none mt-4 lg:mt-8 max-w-xl reveal" style="transition-delay: 250ms">
+          <!--
+            DESKTOP outcome cards — emotional/end-result phrasing, not feature stats.
+            Bold 2-word outcome on top, supporting detail in muted text below.
+          -->
+          <div class="hidden lg:grid grid-cols-3 gap-3 md:gap-4">
+            <div class="rounded-2xl bg-white ring-1 ring-navy/10 px-4 py-4 shadow-[0_4px_16px_-6px_rgba(45,61,51,0.08)]">
+              <p class="font-display text-[1.15rem] font-bold text-navy leading-snug tracking-[-0.01em]">Lighter mornings</p>
+              <p class="text-[12px] text-text-muted leading-tight mt-1 font-medium">within 1–2 weeks</p>
+            </div>
+            <div class="rounded-2xl bg-white ring-1 ring-navy/10 px-4 py-4 shadow-[0_4px_16px_-6px_rgba(45,61,51,0.08)]">
+              <p class="font-display text-[1.15rem] font-bold text-fresh-blue leading-snug tracking-[-0.01em]">Steady sleep</p>
+              <p class="text-[12px] text-text-muted leading-tight mt-1 font-medium">that actually holds</p>
+            </div>
+            <div class="rounded-2xl bg-white ring-1 ring-navy/10 px-4 py-4 shadow-[0_4px_16px_-6px_rgba(45,61,51,0.08)]">
+              <p class="font-display text-[1.15rem] font-bold text-fresh-green leading-snug tracking-[-0.01em]">Same clinician</p>
+              <p class="text-[12px] text-text-muted leading-tight mt-1 font-medium">every session, always</p>
+            </div>
+          </div>
+
+          <!-- MOBILE inline outcome badges — bigger than v1 (10.5→11.5px), tracking-tight + whitespace-nowrap so labels don't break, flex-wrap kicks in if 390px is too narrow -->
+          <div class="lg:hidden flex items-center justify-center flex-wrap gap-1 tracking-tight">
+            <span class="inline-flex items-center gap-1 bg-white px-2 py-1.5 rounded-full ring-1 ring-navy/10 text-[11.5px] font-medium text-navy/75 shadow-sm whitespace-nowrap">
+              <strong class="font-display font-bold text-navy">Lighter</strong> mornings
+            </span>
+            <span class="inline-flex items-center gap-1 bg-white px-2 py-1.5 rounded-full ring-1 ring-navy/10 text-[11.5px] font-medium text-navy/75 shadow-sm whitespace-nowrap">
+              <strong class="font-display font-bold text-fresh-blue">Steady</strong> sleep
+            </span>
+            <span class="inline-flex items-center gap-1 bg-white px-2 py-1.5 rounded-full ring-1 ring-navy/10 text-[11.5px] font-medium text-navy/75 shadow-sm whitespace-nowrap">
+              <strong class="font-display font-bold text-fresh-green">Same</strong> clinician
+            </span>
+          </div>
+        </div>
+
+        <!--
+          Triple CTA layout via grid:
+          - Desktop (sm+): primary | secondary | WhatsApp round button — all inline.
+          - Mobile (cols-1): primary stacked, secondary stacked, then a small round WA button centered.
+          The round WA button is the official WhatsApp glyph on WA-green, with a pulsing accent dot
+          in the corner signaling live availability. Replaces the previous text link.
+        -->
+        <div class="order-6 lg:order-none mt-4 sm:mt-7 lg:mt-9">
+          <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-[auto_auto] sm:gap-x-3 sm:items-center sm:justify-start">
+            <a
+              href="#hero-form"
+              class="btn-primary inline-flex items-center justify-center gap-2 text-[15px] md:text-[17px] px-5 sm:px-8 py-3.5 sm:py-4 font-semibold w-full sm:w-auto sm:col-start-1 sm:row-start-1"
+              data-cta="hero"
+            >
+              Find the right psychologist
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="3" y1="9" x2="14" y2="9" />
+                <polyline points="9 4 14 9 9 14" />
+              </svg>
+            </a>
+            <button
+              type="button"
+              data-walw-open
+              aria-label="Chat on WhatsApp"
+              class="relative inline-flex items-center justify-center h-12 w-12 sm:h-[52px] sm:w-[52px] rounded-full bg-[#25D366] hover:bg-[#1FB855] text-white transition-all duration-200 hover:scale-[1.06] justify-self-center sm:justify-self-start sm:col-start-2 sm:row-start-1"
+              style="box-shadow: 0 8px 24px -6px rgba(37,211,102,0.55); border: none; cursor: pointer;"
+              data-cta="hero-whatsapp"
+            >
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" class="sm:w-[26px] sm:h-[26px]" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0 0 20.464 3.488"/>
+              </svg>
+              <!-- Pulsing live-availability dot -->
+              <span class="absolute top-[-2px] right-[-2px] h-3.5 w-3.5 rounded-full bg-[#7BC95A] ring-2 ring-bone shadow-[0_0_0_1px_rgba(37,211,102,0.4)]" aria-hidden="true">
+                <span class="anim-soft-pulse absolute inset-0 rounded-full bg-[#7BC95A]"></span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT — Hero illustration (mobile: fills container width; portrait at lg+).
+           anim-float is applied to the <figure> wrapper so the whole framed image
+           (image + gradient block + floating callouts) bobs together as one unit.
+           Applying it to the <img> alone exposes a sand-colored sliver at the bottom of the container. -->
+      <div class="order-4 lg:order-none lg:col-span-5 reveal mt-4 sm:mt-6 lg:mt-0" style="transition-delay: 200ms">
+        <figure class="anim-float relative w-full sm:max-w-md mx-auto lg:max-w-none">
+          <!-- Mobile: 50vh wellness/lifestyle premium per §42 (mental health = wellness, hero carries the emotional outcome).
+               sm+: aspect-[3/2]. lg+: portrait 4/5. bg-sand so anim-float never reveals a stark white border. -->
+          <div class="h-[50vh] min-h-[320px] sm:h-auto sm:min-h-0 sm:aspect-[3/2] lg:aspect-[4/5] rounded-[18px] sm:rounded-[28px] overflow-hidden bg-sand">
+            <img
+              src="/images/generated/hero-illustration-v2.webp"
+              alt="Calm modern Dubai mental-health clinic interior. Two armchairs facing each other in soft sage and cream tones, large windows with diffused light, a small plant on a side table."
+              width="1200"
+              height="1500"
+              fetchpriority="high"
+              decoding="async"
+              class="w-full h-full object-cover lg:h-auto lg:object-contain"
+              style="object-position: center 38%;"
+            />
+          </div>
+
+          <!-- Floating "Confidential care" callout — top-left, mobile + desktop -->
+          <div
+            class="absolute top-3 left-3 z-10 lg:top-[22%] lg:left-[-28px] bg-white text-navy rounded-xl lg:rounded-2xl pl-1.5 lg:pl-2.5 pr-2.5 lg:pr-4 py-1.5 lg:py-2.5 flex items-center gap-1.5 lg:gap-2.5 ring-1 ring-navy/10 lg:anim-pop-in lg:anim-pop-in-1"
+            style="box-shadow: 0 12px 24px -8px rgba(45,61,51,0.18);"
+          >
+            <span class="relative inline-flex items-center justify-center h-5 w-5 lg:h-7 lg:w-7 rounded-full bg-fresh-green text-navy shrink-0">
+              <!-- §49: removed decorative anim-soft-pulse (premium niche = no idle infinite). WhatsApp dot keeps it (semantically "live"). -->
+              <svg class="relative" width="10" height="10" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="3 9 7 13 15 5" />
+              </svg>
+            </span>
+            <div class="leading-tight">
+              <p class="text-[10px] lg:text-[12px] font-bold text-navy whitespace-nowrap">Confidential care</p>
+              <p class="hidden lg:block text-[9.5px] sm:text-[10.5px] text-text-muted whitespace-nowrap">Private 50-minute sessions</p>
+            </div>
+          </div>
+
+          <!-- Floating "Real progress" outcome stamp — directly below the Confidential card, left side, mobile + desktop -->
+          <div
+            class="absolute top-[60px] left-3 z-10 lg:top-[40%] lg:left-[-28px] bg-fresh-blue text-white rounded-lg lg:rounded-2xl pl-1.5 lg:pl-2.5 pr-2.5 lg:pr-4 py-1.5 lg:py-2.5 flex items-center gap-1.5 lg:gap-2.5 ring-1 ring-fresh-blue/40 lg:anim-pop-in lg:anim-pop-in-2"
+            style="box-shadow: 0 12px 24px -8px rgba(74,103,85,0.45);"
+          >
+            <span class="relative inline-flex items-center justify-center h-5 w-5 lg:h-7 lg:w-7 rounded-full bg-fresh-green text-navy shrink-0">
+              <svg class="relative" width="10" height="10" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true">
+                <path d="M9 1.5 L15 5 V13 L9 16.5 L3 13 V5 Z" />
+              </svg>
+            </span>
+            <div class="leading-tight">
+              <p class="text-[10px] lg:text-[12px] font-bold whitespace-nowrap uppercase tracking-[0.04em]">Real progress</p>
+              <p class="text-[9px] lg:text-[10.5px] text-white/80 whitespace-nowrap">within 1-2 weeks</p>
+            </div>
+          </div>
+        </figure>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Highlighter marker that wraps cleanly across line breaks (desktop H1 can
+     break "anxiety and low mood" onto two lines). box-decoration-break: clone
+     repeats the bottom band on every line fragment instead of one stretched bar. */
+  .hl-marker {
+    background-image: linear-gradient(transparent 68%, rgba(184, 201, 71, 0.4) 68%);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    padding-inline: 0.04em;
+  }
+</style>

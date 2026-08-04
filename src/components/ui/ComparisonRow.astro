@@ -1,0 +1,23 @@
+---
+interface Props {
+  title: string;
+  items: readonly string[] | string[];
+  tone: 'negative' | 'positive';
+}
+const { title, items, tone } = Astro.props;
+const isNeg = tone === 'negative';
+const dotColor = isNeg ? 'bg-text-muted' : 'bg-fresh-blue';
+const titleColor = isNeg ? 'text-text-muted' : 'text-navy';
+---
+
+<div class={`reveal rounded-2xl border-[1.5px] ${isNeg ? 'border-navy/10 bg-bone/60' : 'border-fresh-blue/30 bg-bone shadow-card'} p-7 md:p-8`}>
+  <p class={`eyebrow mb-5 ${titleColor}`}>{title}</p>
+  <ul class="space-y-3.5">
+    {items.map((item) => (
+      <li class="flex items-start gap-3">
+        <span class={`${dotColor} mt-2.5 inline-block h-1.5 w-1.5 rounded-full shrink-0`} aria-hidden="true"></span>
+        <span class={`text-base leading-snug ${isNeg ? 'text-navy/70 line-through decoration-1 decoration-text-muted/40' : 'text-navy font-medium'}`}>{item}</span>
+      </li>
+    ))}
+  </ul>
+</div>

@@ -1,0 +1,318 @@
+---
+/**
+ * Intake-session quiz. Lives in the /intake hero fold, so it opens on question one
+ * with no card title above it (§57).
+ *
+ * Differences from CostEstimateForm (the main-page form): current doctrine applies
+ * here, so there is no numeric step indicator (§12), no in-code pixel calls (§75),
+ * one mid-form reviewing loader before the contact step and none after submit (§59),
+ * and the lead POST is fire-and-forget with an immediate redirect (§71).
+ *
+ * Posts to the same Apps Script webhook as the main form, tagged so the Sheet can
+ * separate the two lead types.
+ */
+const WEBHOOK = 'https://script.google.com/macros/s/AKfycbwAwusYdStxeXdFdH8lZ9fjleraP_O2Ifan7qF57DDEgP96vXVDUU_m5xxbwZ0EyPyCXQ/exec';
+---
+
+<div
+  class="intake-quiz bg-bone border border-border-faint rounded-2xl p-5 sm:p-6 md:p-7 shadow-card lg:min-h-[470px]"
+  data-intake-form
+  data-webhook={WEBHOOK}
+>
+  <div class="h-1 bg-border-soft rounded-full mb-6 overflow-hidden">
+    <div
+      class="h-full bg-fresh-blue transition-[width] duration-300 ease-out"
+      style="width: 25%"
+      data-progress-bar
+    ></div>
+  </div>
+
+  <form data-intake-form-element class="intake-form" novalidate>
+
+    <fieldset class="quiz-step active" data-step="1">
+      <legend class="block text-navy font-semibold text-base sm:text-lg mb-4">What is going on for you right now?</legend>
+      <div class="grid grid-cols-1 gap-2.5">
+        {[
+          { v: 'anxiety',       letter: 'A', label: "Anxiety or stress I can't switch off" },
+          { v: 'low_mood',      letter: 'B', label: "Low mood that won't lift" },
+          { v: 'relationships', letter: 'C', label: 'Strain in my relationship or family' },
+          { v: 'other',         letter: 'D', label: "Something else, I'll explain in the session" },
+        ].map((opt) => (
+          <label class="chip-row">
+            <input type="radio" name="profile" value={opt.v} class="sr-only peer" required />
+            <span class="chip-row-label">
+              <span class="chip-letter">{opt.letter}</span>
+              <span class="chip-text">{opt.label}</span>
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+
+    <fieldset class="quiz-step" data-step="2">
+      <legend class="block text-navy font-semibold text-base sm:text-lg mb-1">Where would you rather have it?</legend>
+      <p class="text-xs sm:text-sm text-text-muted mb-4">The intake session works either way, so pick whichever is easier for you.</p>
+      <div class="grid grid-cols-1 gap-2.5">
+        {[
+          { v: 'in_person', letter: 'A', label: 'In person at the clinic in Dubai Science Park' },
+          { v: 'online',    letter: 'B', label: 'Online, from wherever I am' },
+          { v: 'either',    letter: 'C', label: 'Either one works for me' },
+        ].map((opt) => (
+          <label class="chip-row">
+            <input type="radio" name="format" value={opt.v} class="sr-only peer" required />
+            <span class="chip-row-label">
+              <span class="chip-letter">{opt.letter}</span>
+              <span class="chip-text">{opt.label}</span>
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+
+    <fieldset class="quiz-step" data-step="3">
+      <legend class="block text-navy font-semibold text-base sm:text-lg mb-1">One thing to know before we book you in</legend>
+      <p class="text-xs sm:text-sm text-text-muted mb-4">
+        The intake session carries no charge. If you continue afterwards, sessions run
+        <strong class="font-semibold text-navy"> AED 975 to 1,500</strong> depending on the focus of the treatment, and we are
+        pay and claim rather than direct billing, so you claim it back from your insurer yourself.
+      </p>
+      <div class="grid grid-cols-1 gap-2.5">
+        {[
+          { v: 'pay-claim',   letter: 'A', label: "That works, I'll claim it back myself" },
+          { v: 'self-pay',    letter: 'B', label: "No problem, I'll pay out of pocket" },
+          { v: 'questions',   letter: 'C', label: 'I have questions about this, please call me' },
+          { v: 'researching', letter: 'D', label: "I'm only researching for now" },
+        ].map((opt) => (
+          <label class="chip-row">
+            <input type="radio" name="payment" value={opt.v} class="sr-only peer" required />
+            <span class="chip-row-label">
+              <span class="chip-letter">{opt.letter}</span>
+              <span class="chip-text">{opt.label}</span>
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+
+    <fieldset class="quiz-step" data-step="checking" aria-live="polite">
+      <div class="flex flex-col items-center justify-center py-12 gap-4">
+        <div class="w-8 h-8 border-[2.5px] border-navy/15 border-t-navy rounded-full animate-spin" aria-hidden="true"></div>
+        <p class="text-navy font-medium text-base" data-checking-text>Reading your answers</p>
+      </div>
+    </fieldset>
+
+    <fieldset class="quiz-step" data-step="disqualified" aria-live="polite">
+      <div class="text-center py-4 sm:py-6">
+        <div class="inline-grid place-items-center h-12 w-12 rounded-full bg-fresh-green/15 text-fresh-green mb-4">
+          <svg width="24" height="24" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true">
+            <path d="M9 1.5 L15 5 V13 L9 16.5 L3 13 V5 Z" />
+          </svg>
+        </div>
+        <h3 class="font-display text-xl sm:text-2xl text-navy font-semibold leading-tight mb-3">Thanks for being upfront</h3>
+        <p class="text-text-muted text-sm sm:text-[15px] max-w-md mx-auto leading-relaxed">
+          Reading around is a sensible place to start. When you want to talk it through with somebody,
+          the intake session will be here, and it will still carry no charge.
+        </p>
+      </div>
+    </fieldset>
+
+    <fieldset class="quiz-step" data-step="4">
+      <div class="text-center mb-6 sm:mb-7">
+        <div class="inline-grid place-items-center h-12 w-12 rounded-full bg-fresh-green/15 text-fresh-green mb-4">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+        </div>
+        <h3 class="font-display text-xl sm:text-2xl text-navy font-semibold leading-tight">We can help with this</h3>
+        <p class="text-text-muted text-sm sm:text-[15px] mt-2 max-w-md mx-auto">Where can our team reach you to find a time?</p>
+      </div>
+
+      <div class="space-y-3.5 sm:space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+          <label class="block">
+            <span class="field-label">First name *</span>
+            <input type="text" name="first_name" required class="field" autocomplete="given-name" />
+          </label>
+          <label class="block">
+            <span class="field-label">Last name *</span>
+            <input type="text" name="last_name" required class="field" autocomplete="family-name" />
+          </label>
+        </div>
+        <label class="block">
+          <span class="field-label">Phone *</span>
+          <div class="phone-wrap">
+            <span class="phone-prefix" aria-hidden="true">
+              <span class="phone-flag">🇦🇪</span>
+              <span class="phone-code">+971</span>
+            </span>
+            <input type="tel" name="phone" required class="field phone-input" autocomplete="tel" inputmode="tel" placeholder="50 123 4567" />
+          </div>
+          <span class="field-helper">For booking only.</span>
+        </label>
+        <label class="block">
+          <span class="field-label">E-mail *</span>
+          <input type="email" name="email" required class="field" autocomplete="email" inputmode="email" />
+        </label>
+      </div>
+
+      <div class="mt-6 flex justify-center">
+        <button type="submit" class="btn-primary" data-cta="intake-submit">Request my intake session →</button>
+      </div>
+    </fieldset>
+  </form>
+</div>
+
+<script>
+  function initIntakeForm() {
+    const root = document.querySelector<HTMLElement>('[data-intake-form]');
+    if (!root || root.dataset.initialized) return;
+    root.dataset.initialized = 'true';
+
+    const form = root.querySelector<HTMLFormElement>('[data-intake-form-element]');
+    const progress = root.querySelector<HTMLElement>('[data-progress-bar]');
+    if (!form || !progress) return;
+
+    const steps = Array.from(root.querySelectorAll<HTMLElement>('.quiz-step'));
+    const webhook = root.dataset.webhook || '';
+    let current = 1;
+    const total = 4;
+
+    function show(stepIdOrNum: string | number) {
+      steps.forEach((s) => s.classList.remove('active'));
+      const target = root!.querySelector<HTMLElement>(`.quiz-step[data-step="${stepIdOrNum}"]`);
+      if (target) target.classList.add('active');
+      if (typeof stepIdOrNum === 'number') {
+        current = stepIdOrNum;
+        progress!.style.width = `${(current / total) * 100}%`;
+      }
+      const rect = root!.getBoundingClientRect();
+      if (rect.top < 0) root!.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function validateStep(): boolean {
+      const active = root!.querySelector<HTMLElement>('.quiz-step.active');
+      if (!active) return false;
+
+      const required = Array.from(active.querySelectorAll<HTMLInputElement>('input[required]'));
+      const radioNames = new Set(required.filter((i) => i.type === 'radio').map((r) => r.name));
+      for (const name of radioNames) {
+        if (!active.querySelector(`input[name="${name}"]:checked`)) {
+          active.querySelector<HTMLInputElement>(`input[name="${name}"]`)?.focus();
+          return false;
+        }
+      }
+      for (const input of required.filter((i) => i.type !== 'radio' && i.type !== 'checkbox')) {
+        if (!input.checkValidity()) {
+          input.reportValidity();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // §59 — the one reviewing loader on the page, mid-form, right before contact details.
+    async function runChecking() {
+      const labels = ['Reading your answers', 'Checking which specialist fits', 'We can help'];
+      const textEl = root!.querySelector<HTMLElement>('[data-checking-text]');
+      show('checking');
+      progress!.style.width = '75%';
+      for (let i = 0; i < labels.length; i++) {
+        if (textEl) textEl.textContent = labels[i];
+        await new Promise((r) => setTimeout(r, i === labels.length - 1 ? 650 : 750));
+      }
+      show(4);
+    }
+
+    root.querySelectorAll<HTMLInputElement>('input[type="radio"]').forEach((input) => {
+      input.addEventListener('change', () => {
+        const stepNum = input.closest<HTMLElement>('.quiz-step')?.dataset.step;
+        if (!stepNum) return;
+
+        // Polite end-state: researchers do not get funnelled into the contact step.
+        if (input.name === 'payment' && input.value === 'researching') {
+          setTimeout(() => show('disqualified'), 240);
+          return;
+        }
+
+        setTimeout(() => {
+          if (current.toString() !== stepNum || !validateStep()) return;
+          if (current === 3) { runChecking(); return; }
+          const next = current + 1;
+          if (next <= total) show(next);
+        }, 240);
+      });
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validateStep()) return;
+      if (form.dataset.submitting === 'true') return;
+      form.dataset.submitting = 'true';
+
+      const fd = new FormData(form);
+      const data: Record<string, unknown> = {
+        source: 'Intake Page',
+        landing_page: window.location.pathname,
+        timestamp: new Date().toISOString(),
+      };
+      for (const [k, v] of fd.entries()) data[k] = v.toString();
+
+      // §71 — fire and forget, keepalive so the POST survives the redirect on the next line.
+      if (webhook && webhook.indexOf('PASTE') !== 0) {
+        fetch(webhook, {
+          method: 'POST',
+          mode: 'no-cors',
+          keepalive: true,
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(data),
+        }).catch(() => {});
+      }
+      window.location.href = '/thank-you/';
+    });
+  }
+
+  document.addEventListener('astro:page-load', initIntakeForm);
+  initIntakeForm();
+</script>
+
+<style>
+  .quiz-step {
+    display: none;
+    animation: stepIn 250ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .quiz-step.active { display: block; }
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateX(16px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .quiz-step { animation: none; }
+  }
+
+  .chip-row { @apply block cursor-pointer; }
+  .chip-row-label {
+    @apply flex items-center gap-3 sm:gap-4 px-3.5 sm:px-4 py-3.5 sm:py-4 rounded-xl border-[1.5px] border-border-soft bg-bone hover:border-navy/30 hover:bg-mist/40 transition-all duration-150;
+  }
+  .chip-letter {
+    @apply inline-flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-md bg-mist text-navy font-bold text-sm shrink-0;
+  }
+  .chip-text {
+    @apply text-navy text-[14.5px] sm:text-[15px] md:text-base font-medium leading-tight;
+  }
+  .chip-row input:checked + .chip-row-label { @apply border-fresh-blue bg-fresh-blue/5; }
+  .chip-row input:checked + .chip-row-label .chip-letter {
+    @apply bg-fresh-blue text-white;
+    animation: chipTick 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes chipTick {
+    0%   { transform: scale(0.8) rotate(-4deg); }
+    60%  { transform: scale(1.1) rotate(2deg);  }
+    100% { transform: scale(1)   rotate(0);     }
+  }
+
+  .phone-wrap { @apply relative flex items-stretch; }
+  .phone-prefix {
+    @apply inline-flex items-center gap-1.5 px-3 sm:px-3.5 bg-mist border-[1.5px] border-r-0 border-border-soft rounded-l-xl text-navy font-medium text-sm;
+  }
+  .phone-flag { font-size: 16px; line-height: 1; }
+  .phone-code { @apply tabular-nums text-navy font-semibold; }
+  .phone-input { @apply rounded-l-none flex-1; }
+</style>

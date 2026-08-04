@@ -1,0 +1,97 @@
+---
+/**
+ * Stats counter row — animates from 0 → target when scrolled into view.
+ * Supports formatted numbers with separators, suffixes, and "+" prefixes.
+ *
+ * Usage:
+ *   <StatsCounter
+ *     stats={[
+ *       { value: 7000, suffix: '+', label: 'UAE families served' },
+ *       { value: 365, suffix: '', label: 'days a year, support' },
+ *       { value: 12, suffix: 'yr', label: 'in the UAE' },
+ *     ]}
+ *     variant="dark"
+ *   />
+ */
+interface Stat {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  label: string;
+  decimals?: number;
+}
+interface Props {
+  stats: Stat[];
+  variant?: 'dark' | 'light';
+  class?: string;
+}
+const { stats, variant = 'light', class: extraClass = '' } = Astro.props;
+const isDark = variant === 'dark';
+const valueClass = isDark ? 'text-white' : 'text-navy';
+const labelClass = isDark ? 'text-white/60' : 'text-text-muted';
+---
+
+<div class={`grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-10 ${extraClass}`} data-stats-counter>
+  {stats.map((s, i) => (
+    <div class={`reveal text-center md:text-left reveal-delay-${(i % 4) + 1}`}>
+      <p class={`font-display font-bold leading-none tabular ${valueClass} text-stat`}>
+        {s.prefix && <span>{s.prefix}</span>}
+        <span
+          data-counter
+          data-target={s.value}
+          data-decimals={s.decimals ?? 0}
+        >0</span>
+        {s.suffix && <span>{s.suffix}</span>}
+      </p>
+      <p class={`mt-3 text-xs uppercase tracking-[0.14em] font-medium ${labelClass}`}>{s.label}</p>
+    </div>
+  ))}
+</div>
+
+<script>
+  function initCounters() {
+    const formatNum = (n: number, decimals: number) => {
+      if (decimals === 0) return Math.round(n).toLocaleString('en-US');
+      return n.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    };
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const animate = (el: HTMLElement) => {
+      const target = parseFloat(el.dataset.target || '0');
+      const decimals = parseInt(el.dataset.decimals || '0', 10);
+      if (reduced) {
+        el.textContent = formatNum(target, decimals);
+        return;
+      }
+      const duration = 1400;
+      const start = performance.now();
+      const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+      const tick = (now: number) => {
+        const elapsed = now - start;
+        const t = Math.min(1, elapsed / duration);
+        const v = target * easeOut(t);
+        el.textContent = formatNum(v, decimals);
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const root = entry.target as HTMLElement;
+          root.querySelectorAll<HTMLElement>('[data-counter]').forEach(animate);
+          observer.unobserve(root);
+        }
+      },
+      { rootMargin: '-80px 0px', threshold: 0.1 }
+    );
+
+    document.querySelectorAll<HTMLElement>('[data-stats-counter]').forEach((el) => observer.observe(el));
+  }
+
+  document.addEventListener('astro:page-load', initCounters);
+  initCounters();
+</script>

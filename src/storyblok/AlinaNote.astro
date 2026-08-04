@@ -1,0 +1,53 @@
+---
+import { ALINA_NOTE } from '@/lib/site-content-intake';
+---
+
+<section class="section-pad bg-bone">
+  <div class="container-page">
+    <div class="rounded-2xl bg-mist border border-border-faint shadow-card p-6 sm:p-9 md:p-12 reveal">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-start">
+
+        <div class="lg:col-span-4">
+          <h2 class="font-display text-[clamp(1.5rem,3.2vw,2.25rem)] text-navy font-semibold leading-[1.12] tracking-[-0.015em]">
+            {ALINA_NOTE.headline}
+          </h2>
+
+          <div class="mt-6 flex items-center gap-4">
+            <div class="h-20 w-20 sm:h-24 sm:w-24 rounded-full overflow-hidden bg-fresh-blue shrink-0">
+              <img
+                src={ALINA_NOTE.photo}
+                alt={ALINA_NOTE.photoAlt}
+                width="720"
+                height="720"
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-cover scale-[1.05]"
+              />
+            </div>
+            <div class="leading-tight">
+              <p class="font-display text-[16px] sm:text-[17px] font-bold text-navy">{ALINA_NOTE.attribution}</p>
+              <p class="text-[13px] sm:text-[13.5px] text-text-muted mt-1">{ALINA_NOTE.attributionRole}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-8">
+          {ALINA_NOTE.paragraphs.map((para, i) => (
+            <p class={`text-[15.5px] sm:text-[17px] text-navy/80 leading-relaxed ${i > 0 ? 'mt-4' : ''}`}>{para}</p>
+          ))}
+
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a href="#hero-form" class="btn-primary inline-flex items-center justify-center gap-2 text-[15px] md:text-[17px]" data-cta="alina-note">
+              Talk it through first
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="3" y1="9" x2="14" y2="9" />
+                <polyline points="9 4 14 9 9 14" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

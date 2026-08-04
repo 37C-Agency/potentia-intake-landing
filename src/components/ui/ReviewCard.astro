@@ -1,0 +1,30 @@
+---
+interface Props {
+  name: string;
+  emirate: string;
+  quote: string;
+  photo?: string;
+}
+const { name, emirate, quote, photo } = Astro.props;
+const isPlaceholder = !photo || photo.startsWith('[');
+---
+
+<article class="reveal card card-hover">
+  <div class="flex items-center gap-4 mb-5">
+    <div class="h-12 w-12 rounded-full overflow-hidden bg-sand flex items-center justify-center shrink-0 text-navy font-semibold text-sm">
+      {isPlaceholder ? (
+        <span aria-hidden="true">{name.charAt(0)}</span>
+      ) : (
+        <img src={photo} alt={name} width="48" height="48" loading="lazy" decoding="async" class="object-cover h-full w-full" />
+      )}
+    </div>
+    <div>
+      <p class="font-semibold text-navy">{name}</p>
+      <p class="text-xs text-text-muted mt-0.5">{emirate}</p>
+    </div>
+  </div>
+  <p class="text-fresh-blue text-base mb-3" aria-hidden="true">★★★★★</p>
+  <blockquote class="text-navy leading-relaxed">
+    "{quote}"
+  </blockquote>
+</article>

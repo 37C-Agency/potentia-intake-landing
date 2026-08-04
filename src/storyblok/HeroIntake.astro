@@ -1,0 +1,60 @@
+---
+import { HERO_INTAKE } from '@/lib/site-content-intake';
+import IntakeQuizForm from '@/components/forms/IntakeQuizForm.astro';
+
+/**
+ * /intake hero. The quiz is the first thing on the page: no hero image, no stat
+ * cards, no WhatsApp button competing with it. Copy sets the frame, the quiz takes
+ * the click. Carries id="hero-form" so every shared component CTA resolves here.
+ */
+---
+
+<section id="hero-form" class="relative isolate overflow-hidden bg-bone scroll-mt-20">
+  <div
+    class="absolute inset-0 -z-10"
+    style="background: linear-gradient(180deg, #F2EFD9 0%, #FFFFFF 68%);"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="absolute -right-48 top-[-10%] h-[120%] w-[640px] -z-10 opacity-50 blur-3xl hidden lg:block"
+    style="background: radial-gradient(circle at center, rgba(74,103,85,0.22) 0%, rgba(74,103,85,0) 65%);"
+    aria-hidden="true"
+  ></div>
+
+  <div class="container-wide pt-5 sm:pt-8 md:pt-12 pb-12 sm:pb-16 md:pb-20">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-14 items-start lg:items-center">
+
+      <div class="lg:col-span-6">
+        <h1 class="font-display font-bold text-navy leading-[1.06] tracking-[-0.025em] reveal text-[clamp(2.05rem,8.6vw,3.6rem)] max-w-[19ch]">
+          We <span class="hl-marker">get to know you</span> before you pay.
+        </h1>
+
+        <ul class="mt-4 sm:mt-6 space-y-3 max-w-xl reveal" style="transition-delay: 150ms">
+          {HERO_INTAKE.subBullets.map((line) => (
+            <li class="flex items-start gap-3">
+              <svg class="text-fresh-blue mt-[7px] shrink-0" width="12" height="12" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true">
+                <path d="M9 1.5 L15 5 V13 L9 16.5 L3 13 V5 Z" />
+              </svg>
+              <span class="text-[15px] sm:text-[17px] md:text-[18px] text-navy/75 leading-snug sm:leading-relaxed" set:html={line} />
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="lg:col-span-6 reveal" style="transition-delay: 100ms">
+        <p class="eyebrow text-fresh-green mb-3 text-center lg:text-left">{HERO_INTAKE.formEyebrow}</p>
+        <IntakeQuizForm />
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .hl-marker {
+    background-image: linear-gradient(transparent 68%, rgba(184, 201, 71, 0.4) 68%);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    padding-inline: 0.04em;
+  }
+</style>

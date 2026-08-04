@@ -1,0 +1,101 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import { SOCIAL_PROOF } from '@/lib/site-content';
+import ReviewCard from '@/components/ui/ReviewCard.astro';
+import StatsCounter from '@/components/ui/StatsCounter.astro';
+
+interface Props { blok?: any }
+const { blok } = Astro.props;
+const statSub = blok?.stat_sub ?? SOCIAL_PROOF.statSub;
+const reviews = blok?.reviews ?? SOCIAL_PROOF.reviews;
+const hasReviews = Array.isArray(reviews) && reviews.length > 0;
+const editable = blok ? storyblokEditable(blok) : {};
+---
+
+<section {...editable} class="section-pad bg-bone">
+  <div class="container-page">
+    <!-- Part A — the headline number, animated count-up -->
+    <div class="text-center max-w-4xl mx-auto">
+      <h2 class="reveal font-display text-[clamp(1.6rem,4.5vw,2.75rem)] text-navy font-semibold leading-[1.1] mb-4" style="transition-delay: 100ms">
+        Premium mental-health care,<br/>
+        <span class="text-fresh-blue">on your terms.</span>
+      </h2>
+      <p class="reveal text-base sm:text-body-lg text-text-muted" style="transition-delay: 300ms">{statSub}</p>
+
+      <!-- Supporting stats row -->
+      <div class="reveal mt-8 sm:mt-10 max-w-3xl mx-auto" style="transition-delay: 400ms" data-stats-counter>
+        <div class="grid grid-cols-3 gap-4 md:gap-10">
+          <div class="text-center">
+            <p class="font-display font-bold leading-none tabular text-navy text-stat">
+              <span data-counter data-target="8">0</span>
+            </p>
+            <p class="mt-3 text-xs uppercase tracking-[0.14em] font-medium text-text-muted">Specialists on the team</p>
+          </div>
+          <div class="text-center">
+            <p class="font-display font-bold leading-none tabular text-navy text-stat">
+              <span data-counter data-target="50">0</span><span>min</span>
+            </p>
+            <p class="mt-3 text-xs uppercase tracking-[0.14em] font-medium text-text-muted">Private session length</p>
+          </div>
+          <div class="text-center">
+            <p class="font-display font-bold leading-none tabular text-navy text-stat">
+              DHA
+            </p>
+            <p class="mt-3 text-xs uppercase tracking-[0.14em] font-medium text-text-muted">Licensed clinic</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part B — three review cards (only when real reviews are sourced) -->
+    {hasReviews && (
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+        {reviews.map((r: any) => (
+          <ReviewCard name={r.name} emirate={r.emirate} quote={r.quote} photo={r.photo} />
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<script>
+  // Counter animation (independent script — both this section and any other StatsCounter use the same selector)
+  function initCountersOnSocialProof() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const formatNum = (n: number) => Math.round(n).toLocaleString('en-US');
+
+    const animate = (el: HTMLElement) => {
+      const target = parseFloat(el.dataset.target || '0');
+      if (reduced || target === 0) {
+        el.textContent = formatNum(target);
+        return;
+      }
+      const duration = 1600;
+      const start = performance.now();
+      const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        el.textContent = formatNum(target * easeOut(t));
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const allCounters = document.querySelectorAll<HTMLElement>('[data-counter]');
+    if (!allCounters.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          animate(entry.target as HTMLElement);
+          observer.unobserve(entry.target);
+        }
+      },
+      { rootMargin: '-60px 0px', threshold: 0.4 }
+    );
+    allCounters.forEach((el) => observer.observe(el));
+  }
+  document.addEventListener('astro:page-load', initCountersOnSocialProof);
+  initCountersOnSocialProof();
+</script>

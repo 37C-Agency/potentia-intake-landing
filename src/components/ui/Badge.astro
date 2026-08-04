@@ -1,0 +1,12 @@
+---
+interface Props {
+  variant?: 'light' | 'dark';
+  class?: string;
+}
+const { variant = 'light', class: extraClass = '' } = Astro.props;
+const variantClass = variant === 'light' ? 'trust-pill-light' : 'trust-pill-dark';
+---
+
+<span class={`${variantClass} ${extraClass}`}>
+  <slot />
+</span>

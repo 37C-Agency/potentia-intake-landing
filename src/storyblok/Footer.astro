@@ -1,0 +1,40 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import { SITE } from '@/lib/site-content';
+
+interface Props { blok?: any }
+const { blok } = Astro.props;
+const editable = blok ? storyblokEditable(blok) : {};
+const year = new Date().getFullYear();
+---
+
+<footer
+  {...editable}
+  class="bg-navy on-dark border-t border-white/10"
+>
+  <div class="container-wide py-10 sm:py-12 flex flex-col items-center text-center gap-4">
+    <!-- Logo on white pill so the colored mark stays visible on navy -->
+    <a href="/" class="inline-flex items-center justify-center bg-white rounded-2xl px-4 py-3 ring-1 ring-white/10 shadow-md">
+      <img
+        src="/brand/potentia-logo.png"
+        alt="Potentia Clinics"
+        width="170"
+        height="79"
+        class="h-10 sm:h-11 w-auto"
+      />
+    </a>
+    <p class="text-white/55 text-xs sm:text-sm tabular">© {year} {SITE.name}</p>
+    <p class="text-white/35 text-[11px] sm:text-xs">
+      Marketing done with love by
+      {' '}
+      <a
+        href="https://www.37consult.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-white/55 hover:text-fresh-green underline decoration-white/20 hover:decoration-fresh-green underline-offset-2 transition-colors"
+      >
+        www.37consult.com
+      </a>
+    </p>
+  </div>
+</footer>

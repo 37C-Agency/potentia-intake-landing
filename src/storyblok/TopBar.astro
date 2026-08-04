@@ -1,0 +1,35 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import { TOP_BAR } from '@/lib/site-content';
+
+interface Props { blok?: any }
+const { blok } = Astro.props;
+const trustLine = blok?.trust_line ?? TOP_BAR.trustLine;
+const ctaLabel = blok?.cta_label ?? TOP_BAR.ctaLabel;
+const editable = blok ? storyblokEditable(blok) : {};
+---
+
+<header
+  {...editable}
+  class="lg:sticky lg:top-0 z-40 bg-bone/95 backdrop-blur-md border-b border-border-faint"
+>
+  <div class="container-wide flex items-center justify-between gap-4 py-3 sm:py-3.5 md:py-4">
+    <a href="/" class="flex items-center shrink-0">
+      <img
+        src="/brand/potentia-logo.png"
+        alt="Potentia Clinics — Mental Health Reimagined"
+        width="160"
+        height="74"
+        class="h-9 sm:h-10 md:h-11 w-auto"
+      />
+    </a>
+
+    <a
+      href="#hero-form"
+      class="btn-primary-sm shrink-0"
+      data-cta="topbar"
+    >
+      {ctaLabel}
+    </a>
+  </div>
+</header>

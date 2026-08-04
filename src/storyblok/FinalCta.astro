@@ -1,0 +1,44 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import { FINAL_CTA } from '@/lib/site-content';
+
+interface Props { blok?: any }
+const { blok } = Astro.props;
+const headline = blok?.headline ?? FINAL_CTA.headline;
+const sub = blok?.sub ?? FINAL_CTA.sub;
+const primary = blok?.primary_cta ?? FINAL_CTA.primary;
+const editable = blok ? storyblokEditable(blok) : {};
+---
+
+<section
+  {...editable}
+  class="relative isolate overflow-hidden py-16 sm:py-20 md:py-24 on-dark"
+>
+  <div
+    class="absolute inset-0 -z-10"
+    style="background-image: linear-gradient(180deg, rgba(45,61,51,0.82) 0%, rgba(45,61,51,0.94) 100%), url('/images/generated/hero-illustration-v2.webp'); background-size: cover; background-position: center;"
+    aria-hidden="true"
+  ></div>
+
+  <div class="container-wide text-center max-w-3xl mx-auto reveal">
+    <h2 class="font-display text-white font-semibold leading-[1.1] tracking-[-0.02em] text-[clamp(1.4rem,4.4vw,2.6rem)] max-w-none mx-auto whitespace-nowrap">
+      {headline}
+    </h2>
+    <p class="mt-5 text-base sm:text-body-lg text-white/80 max-w-xl mx-auto leading-relaxed" style="text-wrap: balance;">{sub}</p>
+
+    <div class="mt-8 sm:mt-10 flex justify-center">
+      <a
+        href="#hero-form"
+        class="inline-flex items-center justify-center gap-2 bg-fresh-green hover:bg-[#C8D662] text-navy font-semibold rounded-pill px-7 sm:px-9 py-3.5 sm:py-4 text-base md:text-[17px] transition-all duration-200 hover:scale-[1.04]"
+        data-cta="final-cta"
+      >
+        {primary}
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="9" x2="14" y2="9" />
+          <polyline points="9 4 14 9 9 14" />
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,24 @@
+---
+interface Props {
+  rating: number;
+  count?: number | string;
+  variant?: 'dark' | 'light';
+  class?: string;
+}
+const { rating, count, variant = 'dark', class: extraClass = '' } = Astro.props;
+const textClass = variant === 'dark' ? 'text-navy' : 'text-white';
+const starClass = variant === 'dark' ? 'text-fresh-blue' : 'text-fresh-blue';
+const mutedClass = variant === 'dark' ? 'text-text-muted' : 'text-white/70';
+const showCount = count !== undefined && count !== 0 && count !== '0';
+---
+
+<div class={`inline-flex items-center gap-2 ${textClass} ${extraClass}`}>
+  <span class={`${starClass} tracking-tight text-base`} aria-hidden="true">
+    {'★'.repeat(Math.round(rating))}
+    <span class="sr-only">{rating} out of 5 stars</span>
+  </span>
+  <span class="text-sm tabular font-medium">
+    {rating.toFixed(1)} on Google
+    {showCount && <span class={mutedClass}> ({count} reviews)</span>}
+  </span>
+</div>

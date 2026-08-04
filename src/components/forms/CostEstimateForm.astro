@@ -1,0 +1,603 @@
+---
+---
+
+<div
+  class="cost-estimate bg-bone border border-border-faint rounded-2xl p-5 sm:p-6 md:p-7 shadow-card"
+  data-cost-form
+>
+  <div class="flex justify-end mb-2">
+    <p class="text-xs text-text-muted tabular-nums" data-step-indicator>
+      1 of 4
+    </p>
+  </div>
+
+  <div class="h-1 bg-border-soft rounded-full mb-6 overflow-hidden">
+    <div
+      class="h-full bg-fresh-blue transition-[width] duration-300 ease-out"
+      style="width: 25%"
+      data-progress-bar
+    ></div>
+  </div>
+
+  <form data-cost-form-element class="cost-form" novalidate>
+
+    {/* STEP 1 — Primary concern (routes the Step-2 follow-up; "other" = multi-select catch-all) */}
+    <fieldset class="cost-step active" data-step="1">
+      <legend class="block text-navy font-semibold text-base sm:text-lg mb-4">What's going on for you right now?</legend>
+      <div class="grid grid-cols-1 gap-2.5">
+        {[
+          { v: 'anxiety',       letter: 'A', label: "Anxiety or stress I can't switch off" },
+          { v: 'low_mood',      letter: 'B', label: "Low mood that won't lift" },
+          { v: 'relationships', letter: 'C', label: 'Strain in my relationship or family' },
+          { v: 'other',         letter: 'D', label: "Something else, I'll explain" },
+        ].map((opt) => (
+          <label class="chip-row">
+            <input type="radio" name="profile" value={opt.v} class="sr-only peer" required />
+            <span class="chip-row-label">
+              <span class="chip-letter">{opt.letter}</span>
+              <span class="chip-text">{opt.label}</span>
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+
+    {/* STEP 2 — Branched follow-up. The active branch is set by the profile chosen in step 1. */}
+    <fieldset class="cost-step" data-step="2">
+
+      {/* Branch A: Anxiety or stress */}
+      <div class="branch hidden" data-branch="anxiety">
+        <legend class="block text-navy font-semibold text-base sm:text-lg mb-4">How does it usually show up?</legend>
+        <div class="grid grid-cols-1 gap-2.5">
+          {[
+            { v: 'racing_thoughts', letter: 'A', label: "Racing thoughts I can't quiet" },
+            { v: 'on_edge',         letter: 'B', label: 'On edge, tense, or panicky' },
+            { v: 'sleep',           letter: 'C', label: "Sleep I can't switch off for" },
+            { v: 'pressure',        letter: 'D', label: 'Pressure from work or life' },
+          ].map((opt) => (
+            <label class="chip-row">
+              <input type="radio" name="follow_up" value={opt.v} class="sr-only peer" disabled />
+              <span class="chip-row-label">
+                <span class="chip-letter">{opt.letter}</span>
+                <span class="chip-text">{opt.label}</span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Branch B: Low mood */}
+      <div class="branch hidden" data-branch="low_mood">
+        <legend class="block text-navy font-semibold text-base sm:text-lg mb-4">What does it feel like most days?</legend>
+        <div class="grid grid-cols-1 gap-2.5">
+          {[
+            { v: 'no_energy',    letter: 'A', label: 'No energy or motivation' },
+            { v: 'no_enjoyment', letter: 'B', label: 'Not enjoying things anymore' },
+            { v: 'weeks',        letter: 'C', label: 'Low for weeks or longer' },
+            { v: 'numb',         letter: 'D', label: 'Empty or numb' },
+          ].map((opt) => (
+            <label class="chip-row">
+              <input type="radio" name="follow_up" value={opt.v} class="sr-only peer" disabled />
+              <span class="chip-row-label">
+                <span class="chip-letter">{opt.letter}</span>
+                <span class="chip-text">{opt.label}</span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Branch C: Relationship or family strain */}
+      <div class="branch hidden" data-branch="relationships">
+        <legend class="block text-navy font-semibold text-base sm:text-lg mb-4">Who is it mostly with?</legend>
+        <div class="grid grid-cols-1 gap-2.5">
+          {[
+            { v: 'partner',   letter: 'A', label: 'My partner' },
+            { v: 'family',    letter: 'B', label: 'My family' },
+            { v: 'parenting', letter: 'C', label: 'Parenting or my child' },
+            { v: 'multiple',  letter: 'D', label: 'A few relationships at once' },
+          ].map((opt) => (
+            <label class="chip-row">
+              <input type="radio" name="follow_up" value={opt.v} class="sr-only peer" disabled />
+              <span class="chip-row-label">
+                <span class="chip-letter">{opt.letter}</span>
+                <span class="chip-text">{opt.label}</span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Branch D: Other / catch-all, keeps the original 8-chip multi-select */}
+      <div class="branch hidden" data-branch="other">
+      <legend class="block text-navy font-semibold text-base sm:text-lg mb-1">What is on your mind?</legend>
+      <p class="text-xs sm:text-sm text-text-muted mb-4">Multiple answers are possible. Confidential.</p>
+      <div class="grid grid-cols-1 gap-2.5">
+        {[
+          { v: 'anxiety',       label: 'Anxiety or stress',       icon: 'anxiety' },
+          { v: 'depression',    label: 'Low mood or depression',  icon: 'depression' },
+          { v: 'relationships', label: 'Relationships or family', icon: 'relationships' },
+          { v: 'sleep',         label: 'Sleep or burnout',        icon: 'sleep' },
+          { v: 'trauma',        label: 'Trauma or grief',         icon: 'trauma' },
+          { v: 'focus',         label: 'ADHD or focus',           icon: 'focus' },
+          { v: 'eating',        label: 'Eating concerns',         icon: 'eating' },
+          { v: 'other',         label: 'Something else',          icon: 'other' },
+        ].map((opt) => (
+          <label class="chip-row">
+            <input type="checkbox" name="concerns[]" value={opt.v} class="sr-only peer" />
+            <span class="chip-row-label chip-row-icon">
+              <!-- §48: Lucide icons. 24x24 viewBox, 1.75 stroke, round caps/joins. Paths from lucide.dev. -->
+              <span class="chip-icon" aria-hidden="true">
+                {opt.icon === 'anxiety' && (
+                  /* lucide brain */
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />
+                    <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" />
+                    <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" />
+                  </svg>
+                )}
+                {opt.icon === 'depression' && (
+                  /* lucide heart */
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                  </svg>
+                )}
+                {opt.icon === 'relationships' && (
+                  /* lucide users */
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                )}
+                {opt.icon === 'sleep' && (
+                  /* lucide moon */
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                  </svg>
+                )}
+                {opt.icon === 'trauma' && (
+                  /* lucide umbrella — protection through hard weather */
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 12a10.06 10.06 0 0 0-20 0Z" />
+                    <path d="M12 12v8a2 2 0 0 0 4 0" />
+                    <path d="M12 2v1" />
+                  </svg>
+                )}
+                {opt.icon === 'focus' && (
+                  /* lucide target */
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="12" r="6" />
+                    <circle cx="12" cy="12" r="2" />
+                  </svg>
+                )}
+                {opt.icon === 'eating' && (
+                  /* lucide utensils */
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+                    <path d="M7 2v20" />
+                    <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+                  </svg>
+                )}
+                {opt.icon === 'other' && (
+                  /* lucide circle-help */
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                    <path d="M12 17h.01" />
+                  </svg>
+                )}
+              </span>
+              <span class="chip-text">{opt.label}</span>
+              <span class="chip-tick" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 9 7 13 15 5" /></svg>
+              </span>
+            </span>
+          </label>
+        ))}
+      </div>
+        <div class="mt-6 flex justify-center">
+          <button type="button" class="btn-primary" data-next data-multi-required="concerns[]">To the next question →</button>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- STEP 3 — Pay-and-claim acknowledgement (we don't direct-bill insurance) -->
+    <fieldset class="cost-step" data-step="3">
+      <legend class="block text-navy font-semibold text-base sm:text-lg mb-1">A quick note on how we handle payment</legend>
+      <p class="text-xs sm:text-sm text-text-muted mb-4">Potentia does <strong class="font-semibold text-navy">not</strong> offer insurance direct billing. You pay at the clinic, and we give you a receipt you can submit to your insurance provider for reimbursement. This is called pay-and-claim.</p>
+      <div class="grid grid-cols-1 gap-2.5">
+        {[
+          { v: 'pay-claim',   letter: 'A', label: "That works. I'll pay and claim from my insurance" },
+          { v: 'self-pay',    letter: 'B', label: "No problem. I'll pay out-of-pocket (no insurance)" },
+          { v: 'questions',   letter: 'C', label: "I have questions about this, please call me" },
+          { v: 'researching', letter: 'D', label: "I'm just researching for now" },
+        ].map((opt) => (
+          <label class="chip-row">
+            <input type="radio" name="payment" value={opt.v} class="sr-only peer" required />
+            <span class="chip-row-label">
+              <span class="chip-letter">{opt.letter}</span>
+              <span class="chip-text">{opt.label}</span>
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+
+    <!-- DISQUALIFIED — polite "not the right fit" (no submission, no contact step)
+         Always offer a WA fallback so users with a different question can still
+         reach the team — turns a dead-end into a warm door. Per §34. -->
+    <fieldset class="cost-step" data-step="disqualified" aria-live="polite">
+      <div class="text-center py-4 sm:py-6">
+        <div class="inline-grid place-items-center h-12 w-12 rounded-full bg-fresh-green/15 text-fresh-green mb-4">
+          <svg width="24" height="24" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true">
+            <path d="M9 1.5 L15 5 V13 L9 16.5 L3 13 V5 Z" />
+          </svg>
+        </div>
+        <h3 class="font-display text-xl sm:text-2xl text-navy font-semibold leading-tight mb-3">Thanks for being upfront</h3>
+        <p class="text-text-muted text-sm sm:text-[15px] max-w-md mx-auto leading-relaxed mb-6">
+          Potentia is for patients ready to start care in the next few weeks. When the timing feels right for you, we will be here to help.
+        </p>
+
+        <p class="text-xs sm:text-sm text-text-muted mb-3">Have a different question? Message us directly.</p>
+        <a
+          href="https://wa.me/971527173080?text=Hi%20Potentia%20Clinics%2C%20I%20have%20a%20question%20about%20working%20with%20your%20team."
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#1FB855] text-white font-semibold rounded-pill px-6 sm:px-7 py-3 sm:py-3.5 text-sm sm:text-base transition-all duration-200 hover:scale-[1.04]"
+          data-cta="disqualified-whatsapp"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0 0 20.464 3.488"/>
+          </svg>
+          Chat on WhatsApp
+        </a>
+      </div>
+    </fieldset>
+
+    <!-- STEP 4 — Contact details -->
+    <fieldset class="cost-step" data-step="4">
+      <div class="text-center mb-6 sm:mb-7">
+        <div class="inline-grid place-items-center h-12 w-12 rounded-full bg-fresh-green/15 text-fresh-green mb-4">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+        </div>
+        <h3 class="font-display text-xl sm:text-2xl text-navy font-semibold leading-tight">Thanks. One last step.</h3>
+        <p class="text-text-muted text-sm sm:text-[15px] mt-2 max-w-md mx-auto">Where can our team reach you to confirm your match and scheduling?</p>
+      </div>
+
+      <div class="space-y-3.5 sm:space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+          <label class="block">
+            <span class="field-label">First name *</span>
+            <input type="text" name="first_name" required class="field" autocomplete="given-name" />
+          </label>
+          <label class="block">
+            <span class="field-label">Last name *</span>
+            <input type="text" name="last_name" required class="field" autocomplete="family-name" />
+          </label>
+        </div>
+        <label class="block">
+          <span class="field-label">Phone *</span>
+          <div class="phone-wrap">
+            <span class="phone-prefix" aria-hidden="true">
+              <span class="phone-flag">🇦🇪</span>
+              <span class="phone-code">+971</span>
+            </span>
+            <input type="tel" name="phone" required class="field phone-input" autocomplete="tel" inputmode="tel" placeholder="50 123 4567" />
+          </div>
+          <span class="field-helper">For booking only.</span>
+        </label>
+        <label class="block">
+          <span class="field-label">E-mail *</span>
+          <input type="email" name="email" required class="field" autocomplete="email" inputmode="email" />
+        </label>
+      </div>
+
+      <div class="mt-6 flex justify-center">
+        <button type="submit" class="btn-primary">Request my consultation →</button>
+      </div>
+    </fieldset>
+
+    <!-- SUCCESS state -->
+    <div class="cost-step cost-success" data-step="success">
+      <div class="text-center py-6">
+        <div class="inline-grid place-items-center h-14 w-14 rounded-full bg-fresh-blue/15 text-fresh-blue mb-4">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <p class="font-display text-2xl text-navy mb-2 font-semibold">Thanks. Check your email.</p>
+        <p class="text-text-muted text-sm mb-6 max-w-sm mx-auto leading-relaxed">
+          You'll hear from us within 24 hours.
+        </p>
+      </div>
+    </div>
+  </form>
+
+</div>
+
+<script>
+  function initCostForm() {
+    const root = document.querySelector<HTMLElement>('[data-cost-form]');
+    if (!root || root.dataset.initialized) return;
+    root.dataset.initialized = 'true';
+    const form = root.querySelector<HTMLFormElement>('[data-cost-form-element]');
+    const steps = Array.from(root.querySelectorAll<HTMLElement>('.cost-step'));
+    const stepIndicator = root.querySelector<HTMLElement>('[data-step-indicator]');
+    const progress = root.querySelector<HTMLElement>('[data-progress-bar]');
+    if (!form || !stepIndicator || !progress) return;
+
+    let current = 1;
+    const total = 4;
+    const stepViewedFired = new Set<number>([1]);
+
+    function fireEvent(name: string, props: Record<string, unknown> = {}) {
+      const w = window as unknown as { plausible?: (n: string, opts?: { props?: Record<string, unknown> }) => void };
+      try { w.plausible?.(name, { props }); } catch {}
+      const fb = (window as unknown as { fbq?: (action: string, name: string, props?: Record<string, unknown>) => void }).fbq;
+      try { fb?.('trackCustom', name, props); } catch {}
+    }
+
+    function show(stepIdOrNum: string | number) {
+      steps.forEach((s) => s.classList.remove('active'));
+      const target = root.querySelector<HTMLElement>(`.cost-step[data-step="${stepIdOrNum}"]`);
+      if (target) target.classList.add('active');
+      if (typeof stepIdOrNum === 'number') {
+        current = stepIdOrNum;
+        stepIndicator.textContent = `${current} of ${total}`;
+        progress.style.width = `${(current / total) * 100}%`;
+        if (!stepViewedFired.has(current)) {
+          stepViewedFired.add(current);
+          fireEvent('Consultation Form Step View', { step: current });
+        }
+        const rect = root.getBoundingClientRect();
+        if (rect.top < 0) {
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else if (stepIdOrNum === 'success') {
+        stepIndicator.textContent = 'Sent ✓';
+        progress.style.width = '100%';
+      } else if (stepIdOrNum === 'disqualified') {
+        // Polite end-state — keep progress where it was so user does not feel
+        // they "completed" the form; quietly retire the step counter.
+        stepIndicator.textContent = 'Thanks';
+      }
+    }
+
+    function validateStep(btn: HTMLButtonElement | null = null): boolean {
+      const active = root.querySelector<HTMLElement>('.cost-step.active');
+      if (!active) return false;
+
+      const multiName = btn?.dataset.multiRequired;
+      if (multiName) {
+        const checked = active.querySelectorAll(`input[name="${multiName}"]:checked`);
+        if (checked.length === 0) {
+          const first = active.querySelector<HTMLInputElement>(`input[name="${multiName}"]`);
+          first?.focus();
+          return false;
+        }
+      }
+
+      const required = active.querySelectorAll<HTMLInputElement>('input[required]');
+      const radios = Array.from(required).filter((i) => i.type === 'radio');
+      const radioNames = new Set(radios.map((r) => r.name));
+      for (const name of radioNames) {
+        const checked = active.querySelector(`input[name="${name}"]:checked`);
+        if (!checked) {
+          const first = active.querySelector<HTMLInputElement>(`input[name="${name}"]`);
+          first?.focus();
+          return false;
+        }
+      }
+
+      const others = Array.from(required).filter((i) => i.type !== 'radio' && i.type !== 'checkbox');
+      for (const input of others) {
+        if (!input.checkValidity()) {
+          input.reportValidity();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    root.querySelectorAll<HTMLButtonElement>('[data-next]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (!validateStep(btn)) return;
+        fireEvent('Consultation Form Step Complete', { step: current });
+        const next = current + 1;
+        if (next <= total) show(next);
+      });
+    });
+
+    let submitted = false;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (submitted) return;
+      submitted = true;
+      if (!validateStep()) { submitted = false; return; }
+      const fd = new FormData(form);
+      const data: Record<string, unknown> = {};
+      for (const [k, v] of fd.entries()) {
+        if (k.endsWith('[]')) {
+          const key = k.slice(0, -2);
+          (data[key] as string[]) = (data[key] as string[]) || [];
+          (data[key] as string[]).push(v.toString());
+        } else {
+          data[k] = v;
+        }
+      }
+      fireEvent('Consultation Form Submit', {
+        profile: data.profile,
+        follow_up: data.follow_up,
+        payment: data.payment,
+      });
+      const fetchPromise = fetch('https://script.google.com/macros/s/AKfycbwAwusYdStxeXdFdH8lZ9fjleraP_O2Ifan7qF57DDEgP96vXVDUU_m5xxbwZ0EyPyCXQ/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(data),
+      }).catch(() => {});
+
+      const steps = ['Reviewing your goals', 'Checking practitioner fit', 'Preparing your plan'];
+      const formInner = root.querySelector('.cost-step.active') || root;
+      formInner.innerHTML = `
+        <div class="flex flex-col items-center justify-center py-12 gap-4">
+          <div class="w-8 h-8 border-[2.5px] border-navy/15 border-t-navy rounded-full animate-spin"></div>
+          <p class="text-navy font-medium text-base brief-loading-text">${steps[0]}</p>
+        </div>
+      `;
+      if (stepIndicator) stepIndicator.textContent = '';
+      progress.style.width = '100%';
+      // Swapping the tall contact step for the short spinner removes the browser's
+      // scroll anchor and makes the page jump down. Re-anchor on the form so the
+      // loading state stays in view instead.
+      requestAnimationFrame(() => {
+        root.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      const loadingText = root.querySelector('.brief-loading-text');
+      for (let i = 1; i < steps.length; i++) {
+        await new Promise(r => setTimeout(r, 500));
+        if (loadingText) loadingText.textContent = steps[i];
+      }
+      await Promise.all([fetchPromise, new Promise(r => setTimeout(r, 500))]);
+      window.location.href = '/thank-you/';
+    });
+
+    // Step 2 is branched. The chosen profile in step 1 decides which branch shows.
+    function activateBranch(profileValue: string) {
+      const step2 = root.querySelector<HTMLElement>('.cost-step[data-step="2"]');
+      if (!step2) return;
+      step2.querySelectorAll<HTMLElement>('.branch').forEach((b) => {
+        const isActive = b.dataset.branch === profileValue;
+        b.classList.toggle('hidden', !isActive);
+        b.querySelectorAll<HTMLInputElement>('input').forEach((inp) => {
+          inp.disabled = !isActive;
+        });
+      });
+    }
+
+    root.querySelectorAll<HTMLInputElement>('input[name="profile"]').forEach((input) => {
+      input.addEventListener('change', () => activateBranch(input.value));
+    });
+
+    // Auto-advance on single-select radios. Multi-select (branch "other") requires the explicit button; step 4 is contact submit.
+    root.querySelectorAll<HTMLInputElement>('input[type="radio"]').forEach((input) => {
+      input.addEventListener('change', () => {
+        const stepEl = input.closest<HTMLElement>('.cost-step');
+        const stepNum = stepEl?.dataset.step;
+        if (!stepNum) return;
+        // Disqualifier: payment-step "researching" politely ends the flow without
+        // collecting contact details. Owner does not want unqualified leads.
+        if (input.name === 'payment' && input.value === 'researching') {
+          setTimeout(() => {
+            fireEvent('Consultation Form Disqualified', { reason: 'researching' });
+            show('disqualified');
+          }, 240);
+          return;
+        }
+        setTimeout(() => {
+          if (current.toString() === stepNum && validateStep()) {
+            const next = current + 1;
+            if (next <= total) show(next);
+          }
+        }, 240);
+      });
+    });
+
+    fireEvent('Consultation Form Step View', { step: 1 });
+  }
+
+  document.addEventListener('astro:page-load', initCostForm);
+  initCostForm();
+</script>
+
+<style>
+  .cost-step {
+    display: none;
+    animation: stepIn 250ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .cost-step.active {
+    display: block;
+  }
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateX(16px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cost-step { animation: none; }
+  }
+
+  /* Lettered chip rows (A, B, C…) — mirrors live questionnaire visual */
+  .chip-row {
+    @apply block cursor-pointer;
+  }
+  .chip-row-label {
+    @apply flex items-center gap-3 sm:gap-4 px-3.5 sm:px-4 py-3.5 sm:py-4 rounded-xl border-[1.5px] border-border-soft bg-bone hover:border-navy/30 hover:bg-mist/40 transition-all duration-150;
+  }
+  .chip-letter {
+    @apply inline-flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-md bg-mist text-navy font-bold text-sm shrink-0;
+  }
+  .chip-text {
+    @apply text-navy text-[14.5px] sm:text-[15px] md:text-base font-medium leading-tight;
+  }
+  .chip-row input:checked + .chip-row-label {
+    @apply border-fresh-blue bg-fresh-blue/5;
+  }
+  .chip-row input:checked + .chip-row-label .chip-letter {
+    @apply bg-fresh-blue text-white;
+    animation: chipTick 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .chip-row input:checked + .chip-row-label .chip-text {
+    @apply text-navy;
+  }
+  @keyframes chipTick {
+    0%   { transform: scale(0.8) rotate(-4deg); }
+    60%  { transform: scale(1.1) rotate(2deg);  }
+    100% { transform: scale(1)   rotate(0);     }
+  }
+
+  /* Checkbox variant */
+  .chip-row-check .chip-check {
+    @apply inline-flex items-center justify-center h-6 w-6 sm:h-7 sm:w-7 rounded-md border-[1.5px] border-border-soft bg-white text-transparent shrink-0 transition-all;
+  }
+  .chip-row input[type="checkbox"]:checked + .chip-row-label .chip-check {
+    @apply bg-fresh-blue border-fresh-blue text-white;
+    animation: chipTick 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Icon-led chip variant (step 2 — multi-select with brand icons per option, per §34) */
+  .chip-row-icon {
+    @apply justify-start;
+  }
+  .chip-icon {
+    @apply inline-flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 rounded-lg bg-fresh-green/10 text-fresh-green shrink-0 transition-all;
+  }
+  .chip-row-icon .chip-text {
+    @apply flex-1;
+  }
+  .chip-tick {
+    @apply inline-flex items-center justify-center h-6 w-6 rounded-full border-[1.5px] border-border-soft bg-white text-transparent shrink-0 transition-all;
+  }
+  .chip-row input[type="checkbox"]:checked + .chip-row-label .chip-icon {
+    @apply bg-fresh-green text-white;
+    animation: chipTick 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .chip-row input[type="checkbox"]:checked + .chip-row-label .chip-tick {
+    @apply bg-fresh-green border-fresh-green text-white;
+  }
+
+  /* Phone input with UAE prefix */
+  .phone-wrap {
+    @apply relative flex items-stretch;
+  }
+  .phone-prefix {
+    @apply inline-flex items-center gap-1.5 px-3 sm:px-3.5 bg-mist border-[1.5px] border-r-0 border-border-soft rounded-l-xl text-navy font-medium text-sm;
+  }
+  .phone-flag { font-size: 16px; line-height: 1; }
+  .phone-code { @apply tabular-nums text-navy font-semibold; }
+  .phone-input {
+    @apply rounded-l-none flex-1;
+  }
+</style>

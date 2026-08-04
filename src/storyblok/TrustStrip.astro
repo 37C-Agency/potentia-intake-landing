@@ -1,0 +1,64 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import { TRUST_STRIP, SITE } from '@/lib/site-content';
+
+interface Props { blok?: any }
+const { blok } = Astro.props;
+const counters = blok?.counters ?? TRUST_STRIP.counters;
+const editable = blok ? storyblokEditable(blok) : {};
+---
+
+<!--
+  Symmetric centered trust band:
+  Row 1 — rating + 3 counters in one balanced inline group, all centered
+  Row 2 — credential pills, centered, wrap freely
+-->
+<section
+  {...editable}
+  class="bg-navy text-white on-dark border-y border-white/5"
+  aria-label="Trust signals"
+>
+  <div class="container-wide py-8 sm:py-10 md:py-12">
+
+    <!-- Row 1 — rating (always inline) + counters: drop-pill cards on mobile, inline group on md+ -->
+    <div class="reveal flex flex-col items-center gap-5 md:flex-row md:flex-wrap md:justify-center md:gap-x-12 lg:gap-x-16 md:gap-y-5">
+      <!-- Google rating -->
+      <div class="flex items-center gap-2.5">
+        <span aria-hidden="true" class="text-fresh-green text-xl sm:text-2xl tracking-tight leading-none">★★★★★</span>
+        <div class="leading-tight text-left">
+          <p class="text-sm sm:text-base font-semibold tabular">{SITE.googleRating.toFixed(1)} on Google</p>
+        </div>
+      </div>
+
+      <!-- Vertical separator on md+ -->
+      <span class="hidden md:inline-block w-px h-10 bg-white/15" aria-hidden="true"></span>
+
+      <!-- MOBILE counters — 3-col drop-pill cards, brand-colored numbers, hexagon icons -->
+      <div class="md:hidden grid grid-cols-3 gap-2 w-full max-w-sm">
+        {counters.map((c: { value: string; label: string }, idx: number) => {
+          const accent = idx === 1 ? 'text-fresh-green' : 'text-fresh-blue';
+          const bgTint = idx === 1 ? 'bg-fresh-green/10 ring-fresh-green/25' : 'bg-fresh-blue/10 ring-fresh-blue/25';
+          return (
+            <div class={`relative flex flex-col items-center text-center rounded-2xl ring-1 ${bgTint} px-2 py-3`}>
+              <!-- Hexagon brand mark -->
+              <svg class={`${accent} mb-1`} width="13" height="13" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true">
+                <path d="M9 1.5 L15 5 V13 L9 16.5 L3 13 V5 Z" />
+              </svg>
+              <p class={`font-display text-[15px] font-bold leading-none tabular ${accent}`}>{c.value}</p>
+              <p class="text-[9.5px] uppercase tracking-[0.1em] text-white/65 mt-1 font-semibold leading-tight">{c.label}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      <!-- DESKTOP counters — inline minimal -->
+      {counters.map((c: { value: string; label: string }) => (
+        <div class="hidden md:block text-center">
+          <p class="font-display text-base sm:text-lg md:text-xl text-white font-bold leading-none tabular">{c.value}</p>
+          <p class="text-[9.5px] sm:text-[10.5px] uppercase tracking-[0.12em] text-white/55 mt-1.5 font-medium whitespace-nowrap">{c.label}</p>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

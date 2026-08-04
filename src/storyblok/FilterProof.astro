@@ -1,0 +1,75 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import { FILTER_PROOF } from '@/lib/site-content';
+
+interface Props { blok?: any }
+const { blok } = Astro.props;
+const eyebrow = blok?.eyebrow ?? FILTER_PROOF.eyebrow;
+const headline = blok?.headline ?? FILTER_PROOF.headline;
+const body = blok?.body ?? FILTER_PROOF.body;
+const image = blok?.image ?? FILTER_PROOF.image;
+const imageAlt = blok?.image_alt ?? FILTER_PROOF.imageAlt;
+const badgeClean = blok?.badge_clean ?? FILTER_PROOF.badgeClean;
+const badgeUsed = blok?.badge_used ?? FILTER_PROOF.badgeUsed;
+const ctaLabel = blok?.cta_label ?? FILTER_PROOF.ctaLabel;
+const editable = blok ? storyblokEditable(blok) : {};
+---
+
+<section
+  {...editable}
+  id="filter-proof-section"
+  class="section-pad bg-navy text-white on-dark relative overflow-hidden scroll-mt-20"
+  aria-label="Filter proof"
+>
+  <div class="container-page relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 lg:gap-16 items-center">
+    <!-- LEFT — Image with badges -->
+    <div class="reveal lg:col-span-6 relative max-w-md mx-auto lg:max-w-none w-full">
+      <div class="aspect-[4/5] bg-navy rounded-2xl sm:rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
+        <img
+          src={image}
+          alt={imageAlt}
+          width="1200"
+          height="1500"
+          loading="lazy"
+          decoding="async"
+          class="object-cover h-full w-full"
+        />
+      </div>
+
+      <!-- Badge: Clean (top, centered over the WHITE cartridge in the LEFT half) -->
+      <div
+        class="absolute top-3 left-[30%] -translate-x-1/2 bg-fresh-green text-white rounded-xl sm:rounded-2xl shadow-xl px-3 py-2 sm:px-4 sm:py-2.5 lg:px-5 lg:py-3 text-center"
+      >
+        <p class="text-[10px] sm:text-[11px] md:text-xs uppercase tracking-[0.14em] font-bold opacity-90 leading-none whitespace-nowrap">{badgeClean.title}</p>
+        <p class="text-[12.5px] sm:text-sm md:text-base font-semibold leading-snug mt-1 sm:mt-1.5 whitespace-nowrap">{badgeClean.sub}</p>
+        <!-- Pointer tab on bottom-center, pointing DOWN to the white cartridge -->
+        <span class="absolute left-1/2 -translate-x-1/2 -bottom-1.5 w-3 h-3 rotate-45 bg-fresh-green" aria-hidden="true"></span>
+      </div>
+
+      <!-- Badge: Used (bottom, centered under the BROWN cartridge in the RIGHT half) -->
+      <div
+        class="absolute bottom-3 left-[70%] -translate-x-1/2 bg-fresh-blue text-white rounded-xl sm:rounded-2xl shadow-xl px-3 py-2 sm:px-4 sm:py-2.5 lg:px-5 lg:py-3 text-center"
+      >
+        <p class="text-[10px] sm:text-[11px] md:text-xs uppercase tracking-[0.14em] font-bold opacity-90 leading-none whitespace-nowrap">{badgeUsed.title}</p>
+        <p class="text-[12.5px] sm:text-sm md:text-base font-semibold leading-snug mt-1 sm:mt-1.5 whitespace-nowrap">{badgeUsed.sub}</p>
+        <!-- Pointer tab on top-center, pointing UP to the brown cartridge -->
+        <span class="absolute left-1/2 -translate-x-1/2 -top-1.5 w-3 h-3 rotate-45 bg-fresh-blue" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <!-- RIGHT — Copy -->
+    <div class="lg:col-span-6">
+      <p class="reveal eyebrow text-fresh-blue mb-4">{eyebrow}</p>
+      <h2 class="reveal font-display text-h2 text-white leading-tight mb-6 max-w-xl">{headline}</h2>
+      <p class="reveal reveal-delay-1 text-body-lg text-white/85 leading-relaxed max-w-prose mb-8" set:html={body} />
+
+      <a
+        href="#hero-form"
+        class="reveal reveal-delay-2 btn-primary inline-flex"
+        data-cta="filter-proof"
+      >
+        {ctaLabel}
+      </a>
+    </div>
+  </div>
+</section>

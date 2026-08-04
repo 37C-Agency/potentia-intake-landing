@@ -1,0 +1,33 @@
+---
+import { useStoryblokApi } from '@storyblok/astro';
+import StoryblokComponent from '@storyblok/astro/StoryblokComponent.astro';
+import Layout from '@/layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  if (!import.meta.env.STORYBLOK_TOKEN) return [];
+  const api = useStoryblokApi();
+  const { data } = await api.get('cdn/links', { version: 'draft' });
+  return Object.values(data.links)
+    .filter((link: any) => !link.is_folder && link.slug !== 'home')
+    .map((link: any) => ({
+      params: { slug: link.slug },
+    }));
+}
+
+const { slug } = Astro.params;
+let story = null;
+let title;
+let description;
+
+if (import.meta.env.STORYBLOK_TOKEN) {
+  const api = useStoryblokApi();
+  const { data } = await api.get(`cdn/stories/${slug}`, { version: 'draft', resolve_links: 'url' });
+  story = data.story;
+  title = story?.content?.seo_title;
+  description = story?.content?.seo_description;
+}
+---
+
+<Layout title={title} description={description}>
+  {story ? <StoryblokComponent blok={story.content} /> : <p>Story not found.</p>}
+</Layout>

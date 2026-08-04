@@ -1,0 +1,55 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import { STICKY_BAR } from '@/lib/site-content';
+
+interface Props { blok?: any }
+const { blok } = Astro.props;
+const ctaLabel = blok?.cta_label ?? STICKY_BAR.ctaLabel;
+const editable = blok ? storyblokEditable(blok) : {};
+---
+
+<nav
+  {...editable}
+  data-mobile-bar
+  class="md:hidden fixed inset-x-0 bottom-0 z-50 bg-bone shadow-mobile-bar transition-transform duration-200 ease-out"
+  aria-label="Get cost estimate"
+>
+  <div class="p-4">
+    <a
+      href="#hero-form"
+      class="btn-primary w-full"
+      data-cta="mobile-bar"
+    >
+      {ctaLabel}
+    </a>
+  </div>
+</nav>
+
+<script>
+  function initMobileBar() {
+    const bar = document.querySelector<HTMLElement>('[data-mobile-bar]');
+    if (!bar) return;
+
+    // Always visible (no scroll gating). Only tuck away while a form field is
+    // focused so the fixed bar never covers the inputs / mobile keyboard.
+    function updateBarVisibility() {
+      const inputFocused = document.activeElement?.matches('input, textarea, select');
+      bar!.style.transform = inputFocused ? 'translateY(100%)' : 'translateY(0)';
+    }
+
+    document.addEventListener('focusin', (e) => {
+      if ((e.target as HTMLElement).matches('input, textarea, select')) {
+        bar.style.transform = 'translateY(100%)';
+      }
+    });
+    document.addEventListener('focusout', () => {
+      // Small delay so the bar doesn't flash if focus moves between fields
+      setTimeout(updateBarVisibility, 100);
+    });
+
+    updateBarVisibility();
+  }
+
+  document.addEventListener('astro:page-load', initMobileBar);
+  initMobileBar();
+</script>

@@ -1,0 +1,45 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'inline';
+  size?: 'sm' | 'md';
+  type?: 'button' | 'submit' | 'reset';
+  fullWidth?: boolean;
+  ariaLabel?: string;
+  dataCta?: string;
+  class?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  type = 'button',
+  fullWidth = false,
+  ariaLabel,
+  dataCta,
+  class: extraClass = '',
+} = Astro.props;
+
+const baseClass =
+  variant === 'primary'
+    ? size === 'sm'
+      ? 'btn-primary-sm'
+      : 'btn-primary'
+    : 'btn-inline';
+
+const widthClass = fullWidth ? 'w-full' : '';
+const classes = [baseClass, widthClass, extraClass].filter(Boolean).join(' ');
+---
+
+{
+  href ? (
+    <a href={href} class={classes} aria-label={ariaLabel} data-cta={dataCta}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class={classes} aria-label={ariaLabel} data-cta={dataCta}>
+      <slot />
+    </button>
+  )
+}

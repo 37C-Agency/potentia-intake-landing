@@ -1,0 +1,145 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import TopBar from '@/storyblok/TopBar.astro';
+import Footer from '@/storyblok/Footer.astro';
+import { SITE } from '@/lib/site-content';
+---
+
+<Layout
+  title="Thanks. Potentia Clinics"
+  description="Your consultation request was received. A Potentia specialist will reach out within 24 hours."
+  noindex={true}
+>
+  <TopBar />
+
+  <main class="bg-bone min-h-[calc(100vh-4rem)] flex items-center">
+    <div class="container-page py-20 md:py-28 max-w-3xl text-center">
+
+      <!-- Success badge with animation -->
+      <div class="reveal">
+        <div class="inline-grid place-items-center h-20 w-20 rounded-full bg-fresh-blue/15 text-fresh-blue mb-6 success-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+      </div>
+
+      <h1 class="reveal font-display text-display-lg text-navy leading-[1.1] mb-5" style="transition-delay: 200ms">
+        Thanks. Check your email.
+      </h1>
+
+      <p class="reveal text-body-lg text-navy/75 max-w-xl mx-auto mb-6" style="transition-delay: 300ms">
+        You'll hear from a Potentia specialist within 24 hours. Here's exactly what happens next.
+      </p>
+
+      <!-- WhatsApp shortcut — direct to a Potentia specialist (replace number when live) -->
+      <div class="reveal mb-12" style="transition-delay: 350ms">
+        <p class="text-sm text-text-muted mb-3">Want to reach us right now?</p>
+        <a
+          href={`https://wa.me/${SITE.whatsapp}?text=Hi%20Potentia%2C%20I%20just%20submitted%20a%20consultation%20request.`}
+          target="_blank"
+          rel="noopener"
+          class="whatsapp-btn inline-flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#1FB855] text-white font-semibold rounded-pill px-7 py-3.5 shadow-cta transition-all duration-200 hover:scale-[1.04]"
+          data-cta="thankyou-whatsapp"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0 0 20.464 3.488"/>
+          </svg>
+          Chat on WhatsApp
+        </a>
+      </div>
+
+      <!-- 3 next-steps -->
+      <ol class="text-left max-w-md mx-auto space-y-5 mb-12">
+        <li class="reveal flex gap-5 items-start" style="transition-delay: 400ms">
+          <span class="font-display font-bold text-fresh-blue tabular shrink-0 text-2xl leading-none">1.</span>
+          <div>
+            <p class="font-semibold text-navy mb-1">Email confirmation</p>
+            <p class="text-sm text-navy/70">Already on its way to your inbox now. If you don't see it in 5 minutes, check spam.</p>
+          </div>
+        </li>
+        <li class="reveal flex gap-5 items-start" style="transition-delay: 500ms">
+          <span class="font-display font-bold text-fresh-blue tabular shrink-0 text-2xl leading-none">2.</span>
+          <div>
+            <p class="font-semibold text-navy mb-1">A Potentia specialist reaches out</p>
+            <p class="text-sm text-navy/70">Within 24 hours. We confirm your match, scheduling, and pricing. Confidential. No high-pressure calls.</p>
+          </div>
+        </li>
+        <li class="reveal flex gap-5 items-start" style="transition-delay: 600ms">
+          <span class="font-display font-bold text-fresh-blue tabular shrink-0 text-2xl leading-none">3.</span>
+          <div>
+            <p class="font-semibold text-navy mb-1">Your first 50-minute session</p>
+            <p class="text-sm text-navy/70">In person at our DSP clinic. Same psychologist, on your terms.</p>
+          </div>
+        </li>
+      </ol>
+
+      <!-- Reinforcement / trust badges -->
+      <div class="reveal flex flex-wrap items-center justify-center gap-3 mb-12" style="transition-delay: 700ms">
+        <span class="trust-pill-light"><span class="inline-block h-1.5 w-1.5 rounded-full bg-fresh-blue"></span> DHA Licensed</span>
+        <span class="trust-pill-light"><span class="inline-block h-1.5 w-1.5 rounded-full bg-fresh-blue"></span> Dubai Science Park</span>
+        <span class="trust-pill-light"><span class="inline-block h-1.5 w-1.5 rounded-full bg-fresh-blue"></span> Psychology + Psychiatry</span>
+        <span class="trust-pill-light"><span class="inline-block h-1.5 w-1.5 rounded-full bg-fresh-blue"></span> Same clinician each time</span>
+      </div>
+
+      <!-- Secondary CTA / conversion-page bonus content -->
+      <div class="reveal pt-12 border-t border-navy/10" style="transition-delay: 800ms">
+        <p class="text-sm text-text-muted mb-4">While you wait:</p>
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <a href="https://potentiaclinics.com" class="btn-inline text-fresh-blue text-sm" target="_blank" rel="noopener">
+            About Potentia
+          </a>
+          <span class="text-text-muted/40" aria-hidden="true">/</span>
+          <a href="/#faq" class="btn-inline text-fresh-blue text-sm">
+            Read the FAQs
+          </a>
+          <span class="text-text-muted/40" aria-hidden="true">/</span>
+          <a href={SITE.social.instagram} class="btn-inline text-fresh-blue text-sm" target="_blank" rel="noopener">
+            Follow on Instagram
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .success-icon {
+    animation: successPop 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+  @keyframes successPop {
+    0%   { transform: scale(0); opacity: 0; }
+    60%  { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .success-icon { animation: none; opacity: 1; transform: none; }
+  }
+</style>
+
+<script>
+  // CONVERSION PIXELS FIRE HERE — not on form submit.
+  // This is the canonical conversion event for Google Ads and Meta Pixel.
+  function fireConversion() {
+    // Plausible custom event
+    const w = window as unknown as { plausible?: (n: string, opts?: { props?: Record<string, unknown> }) => void };
+    try { w.plausible?.('Lead'); } catch {}
+
+    // Google Ads conversion
+    const env = (import.meta as unknown as { env: Record<string, string | undefined> }).env;
+    const adsId = env?.PUBLIC_GOOGLE_ADS_ID;
+    const adsLabel = env?.PUBLIC_GOOGLE_ADS_CONVERSION_LABEL;
+    const gtag = (window as unknown as { gtag?: (action: string, name: string, opts?: Record<string, unknown>) => void }).gtag;
+    if (gtag && adsId && adsLabel) {
+      gtag('event', 'conversion', { send_to: `${adsId}/${adsLabel}` });
+    }
+
+    // Meta Pixel Lead
+    const fb = (window as unknown as { fbq?: (action: string, name: string) => void }).fbq;
+    try { fb?.('track', 'Lead'); } catch {}
+  }
+  document.addEventListener('astro:page-load', fireConversion);
+  fireConversion();
+</script>

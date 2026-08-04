@@ -1,0 +1,66 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import TopBar from '@/storyblok/TopBar.astro';
+import HeroIntake from '@/storyblok/HeroIntake.astro';
+import TrustStrip from '@/storyblok/TrustStrip.astro';
+import AlinaNote from '@/storyblok/AlinaNote.astro';
+import IntakeExplainer from '@/storyblok/IntakeExplainer.astro';
+import FourSituations from '@/storyblok/FourSituations.astro';
+import IntakePricing from '@/storyblok/IntakePricing.astro';
+import SocialProof from '@/storyblok/SocialProof.astro';
+import About from '@/storyblok/About.astro';
+import Faq from '@/storyblok/Faq.astro';
+import FinalCta from '@/storyblok/FinalCta.astro';
+import Footer from '@/storyblok/Footer.astro';
+import { SITUATIONS_INTAKE, FAQ_INTAKE, FINAL_CTA_INTAKE, INTAKE } from '@/lib/site-content-intake';
+
+/**
+ * /intake — application page for the 30-minute intake session.
+ *
+ * Second route in the same repo per §73. Shared sections (TrustStrip, SocialProof,
+ * About, Footer) render unchanged because the proof behind them is the same clinic.
+ * Audience-specific sections pass variant copy through the existing blok override.
+ */
+---
+
+<Layout
+  title="Intake session with a psychologist. Potentia Clinics Dubai."
+  description={`A ${INTAKE.duration} intake session with a qualified clinical psychologist at Potentia Clinics, in person in Dubai Science Park or online. We get to know your situation before you pay for anything.`}
+>
+  <TopBar />
+  <main>
+    <HeroIntake />
+    {/* Counters overridden so the strip does not advertise 50-minute sessions
+        directly under a 30-minute intake. */}
+    <TrustStrip
+      blok={{
+        counters: [
+          { value: '8', label: 'specialists' },
+          { value: '30', label: 'minute intake' },
+          { value: '1:1', label: 'same clinician' },
+        ],
+      }}
+    />
+    <AlinaNote />
+    <IntakeExplainer />
+    <FourSituations
+      blok={{
+        headline: SITUATIONS_INTAKE.headline,
+        items: SITUATIONS_INTAKE.items,
+        cta_label: SITUATIONS_INTAKE.ctaLabel,
+      }}
+    />
+    <IntakePricing />
+    <SocialProof />
+    <About />
+    <Faq blok={{ headline: FAQ_INTAKE.headline, items: FAQ_INTAKE.items }} />
+    <FinalCta
+      blok={{
+        headline: FINAL_CTA_INTAKE.headline,
+        sub: FINAL_CTA_INTAKE.sub,
+        primary_cta: FINAL_CTA_INTAKE.primary,
+      }}
+    />
+  </main>
+  <Footer />
+</Layout>

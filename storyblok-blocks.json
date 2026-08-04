@@ -1,0 +1,148 @@
+{
+  "components": [
+    {
+      "name": "page",
+      "display_name": "Page",
+      "is_root": true,
+      "is_nestable": false,
+      "schema": {
+        "body": { "type": "bloks", "restrict_components": false },
+        "seo_title": { "type": "text" },
+        "seo_description": { "type": "textarea" },
+        "seo_og_image": { "type": "asset", "filetypes": ["images"] }
+      }
+    },
+    {
+      "name": "topBar",
+      "display_name": "Top Bar",
+      "is_nestable": true,
+      "schema": {
+        "trust_line": { "type": "text", "default_value": "ISO 14001 · Swiss Technology · 7,000+ UAE Families" },
+        "cta_label": { "type": "text", "default_value": "Get Free Cost Estimate" }
+      }
+    },
+    {
+      "name": "hero",
+      "display_name": "Hero",
+      "is_nestable": true,
+      "schema": {
+        "headline": { "type": "text", "translatable": true, "default_value": "Clean Water From Every Tap in Your Villa — Without the Plastic" },
+        "subhead": { "type": "textarea", "translatable": true, "default_value": "Drink, cook, and shower with clean filtered water in every room. Free villa assessment, yearly maintenance included." },
+        "trust_bullets": { "type": "options" },
+        "microproof": { "type": "text", "default_value": "Part of the Dubai Can Initiative · Fazaa Partner" },
+        "form_headline": { "type": "text", "default_value": "Get your free villa cost estimate" },
+        "form_sub": { "type": "text", "default_value": "Free · No commitment · Reply within 24 hours" },
+        "background_image": { "type": "asset", "filetypes": ["images"] }
+      }
+    },
+    {
+      "name": "trustStrip",
+      "display_name": "Trust Strip",
+      "is_nestable": true,
+      "schema": {
+        "badges": { "type": "options" },
+        "counters": { "type": "bloks" }
+      }
+    },
+    {
+      "name": "fourSituations",
+      "display_name": "Four Situations (Problem)",
+      "is_nestable": true,
+      "schema": {
+        "headline": { "type": "text", "default_value": "Does this sound like your home?" },
+        "items": { "type": "bloks" },
+        "cta_label": { "type": "text", "default_value": "Get my free villa cost estimate" }
+      }
+    },
+    {
+      "name": "benefits",
+      "display_name": "Benefits (Solution)",
+      "is_nestable": true,
+      "schema": {
+        "headline": { "type": "text", "default_value": "What changes when you switch to Waterclub" },
+        "items": { "type": "bloks" },
+        "cta_label": { "type": "text", "default_value": "Get my free villa cost estimate" }
+      }
+    },
+    {
+      "name": "process",
+      "display_name": "Process (3 steps)",
+      "is_nestable": true,
+      "schema": {
+        "headline": { "type": "text", "default_value": "Three steps to clean water in every tap" },
+        "steps": { "type": "bloks" }
+      }
+    },
+    {
+      "name": "costComparison",
+      "display_name": "Cost Comparison",
+      "is_nestable": true,
+      "schema": {
+        "headline": { "type": "text", "default_value": "Bottled water costs more than you think" },
+        "intro": { "type": "textarea" },
+        "left_title": { "type": "text", "default_value": "Bottled" },
+        "left_items": { "type": "options" },
+        "right_title": { "type": "text", "default_value": "Waterclub" },
+        "right_items": { "type": "options" },
+        "cta_label": { "type": "text", "default_value": "Get my free villa cost estimate" }
+      }
+    },
+    {
+      "name": "socialProof",
+      "display_name": "Social Proof",
+      "is_nestable": true,
+      "schema": {
+        "stat_headline": { "type": "text", "default_value": "7,000+ UAE families already chose Waterclub" },
+        "stat_sub": { "type": "text", "default_value": "Be one of them." },
+        "reviews": { "type": "bloks" }
+      }
+    },
+    {
+      "name": "about",
+      "display_name": "About Waterclub",
+      "is_nestable": true,
+      "schema": {
+        "headline": { "type": "text", "default_value": "A Dubai team obsessed with clean water" },
+        "paragraphs": { "type": "options" },
+        "credentials": { "type": "options" },
+        "promise": { "type": "textarea", "default_value": "Free assessment. Transparent estimate. Yearly maintenance included. That's the deal." },
+        "team_photo": { "type": "asset", "filetypes": ["images"] }
+      }
+    },
+    {
+      "name": "faq",
+      "display_name": "FAQ",
+      "is_nestable": true,
+      "schema": {
+        "headline": { "type": "text", "default_value": "Common questions before your free assessment" },
+        "items": { "type": "bloks" }
+      }
+    },
+    {
+      "name": "finalCta",
+      "display_name": "Final CTA",
+      "is_nestable": true,
+      "schema": {
+        "headline": { "type": "text", "default_value": "Ready for clean water in every tap?" },
+        "sub": { "type": "textarea", "default_value": "Free cost estimate. Free on-site assessment. No commitment. Reply within 24 hours." },
+        "primary_cta": { "type": "text", "default_value": "Get My Free Cost Estimate" },
+        "badges": { "type": "options" },
+        "background_image": { "type": "asset", "filetypes": ["images"] }
+      }
+    },
+    {
+      "name": "footer",
+      "display_name": "Footer",
+      "is_nestable": true,
+      "schema": {}
+    },
+    {
+      "name": "stickyMobileBar",
+      "display_name": "Sticky Mobile Bar",
+      "is_nestable": true,
+      "schema": {
+        "cta_label": { "type": "text", "default_value": "Get Free Cost Estimate" }
+      }
+    }
+  ]
+}

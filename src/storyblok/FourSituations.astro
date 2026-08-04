@@ -1,0 +1,53 @@
+---
+import { storyblokEditable } from '@storyblok/astro';
+import { FOUR_SITUATIONS } from '@/lib/site-content';
+import SituationIcon from '@/components/icons/SituationIcon.astro';
+
+interface Props { blok?: any }
+const { blok } = Astro.props;
+const headline = blok?.headline ?? FOUR_SITUATIONS.headline;
+const items = blok?.items ?? FOUR_SITUATIONS.items;
+const ctaLabel = blok?.cta_label ?? FOUR_SITUATIONS.ctaLabel;
+const editable = blok ? storyblokEditable(blok) : {};
+---
+
+<section {...editable} class="section-pad bg-mist relative isolate overflow-hidden">
+  <!-- Soft sage glow behind the headline so the section reads as the most important moment on the page -->
+  <div
+    class="absolute inset-x-0 top-0 h-72 -z-10 opacity-60 pointer-events-none"
+    style="background: radial-gradient(ellipse at top, rgba(184,201,71,0.18) 0%, rgba(184,201,71,0) 70%);"
+    aria-hidden="true"
+  ></div>
+
+  <div class="container-page">
+    <div class="max-w-3xl mb-10 sm:mb-14">
+      <h2 class="font-display text-[clamp(1.85rem,5vw,2.85rem)] text-navy font-bold leading-[1.05] tracking-[-0.02em]" style="text-wrap: balance;">{headline}</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-7">
+      {items.map((item: any) => (
+        <article class="situation-card relative bg-bone border border-border-faint rounded-2xl p-5 sm:p-7 md:p-8 overflow-hidden">
+          <div class="flex items-start gap-4 sm:gap-5">
+            <div class="shrink-0">
+              <SituationIcon type={item.icon} class="h-[72px] w-[72px] sm:h-[88px] sm:w-[88px]" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-display text-lg sm:text-h3 text-navy mb-2 sm:mb-3 leading-snug font-bold">{item.title}</h3>
+              <p class="text-navy/75 leading-relaxed text-[14.5px] sm:text-[15px] md:text-base" set:html={item.body} />
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="mt-10 sm:mt-14 text-center">
+      <a href="#hero-form" class="btn-primary inline-flex items-center justify-center gap-2 text-[15px] md:text-[17px]" data-cta="four-situations">
+        {ctaLabel}
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="9" x2="14" y2="9" />
+          <polyline points="9 4 14 9 9 14" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
