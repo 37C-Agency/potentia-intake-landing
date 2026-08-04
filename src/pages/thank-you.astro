@@ -119,27 +119,7 @@ import { SITE } from '@/lib/site-content';
   }
 </style>
 
-<script>
-  // CONVERSION PIXELS FIRE HERE — not on form submit.
-  // This is the canonical conversion event for Google Ads and Meta Pixel.
-  function fireConversion() {
-    // Plausible custom event
-    const w = window as unknown as { plausible?: (n: string, opts?: { props?: Record<string, unknown> }) => void };
-    try { w.plausible?.('Lead'); } catch {}
-
-    // Google Ads conversion
-    const env = (import.meta as unknown as { env: Record<string, string | undefined> }).env;
-    const adsId = env?.PUBLIC_GOOGLE_ADS_ID;
-    const adsLabel = env?.PUBLIC_GOOGLE_ADS_CONVERSION_LABEL;
-    const gtag = (window as unknown as { gtag?: (action: string, name: string, opts?: Record<string, unknown>) => void }).gtag;
-    if (gtag && adsId && adsLabel) {
-      gtag('event', 'conversion', { send_to: `${adsId}/${adsLabel}` });
-    }
-
-    // Meta Pixel Lead
-    const fb = (window as unknown as { fbq?: (action: string, name: string) => void }).fbq;
-    try { fb?.('track', 'Lead'); } catch {}
-  }
-  document.addEventListener('astro:page-load', fireConversion);
-  fireConversion();
-</script>
+{/* Tracking removed 2026-08-03 (Hamza) — this page used to fire fbq/gtag/Plausible
+    directly, bypassing GTM entirely. That pattern is what got the main domain flagged
+    by Meta. No conversion pixels fire in code anywhere in this repo now. GTM is the
+    only place tracking should live once a fresh, unflagged container is set up. */}
