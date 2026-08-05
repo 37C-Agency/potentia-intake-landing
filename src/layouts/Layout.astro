@@ -19,47 +19,13 @@ const {
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? `https://${SITE.domain}`).toString();
 
-// Schema.org — MedicalClinic (LocalBusiness subtype) + AggregateRating
-const localBusinessLd = {
-  '@context': 'https://schema.org',
-  '@type': 'MedicalClinic',
-  '@id': `https://${SITE.domain}#org`,
-  name: SITE.name,
-  legalName: SITE.legalName,
-  url: `https://${SITE.domain}`,
-  description,
-  email: SITE.email,
-  telephone: SITE.phone,
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: 'Dubai Science Park, DSP HQ South Tower, 2nd Floor, 201',
-    addressLocality: 'Dubai',
-    addressCountry: 'AE',
-  },
-  areaServed: [
-    { '@type': 'AdministrativeArea', name: 'Dubai' },
-    { '@type': 'Country', name: 'United Arab Emirates' },
-  ],
-  medicalSpecialty: ['Psychology', 'Psychiatry', 'Nutrition'],
-  ...(SITE.googleReviewsCount > 0 && {
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: SITE.googleRating,
-      reviewCount: SITE.googleReviewsCount,
-    },
-  }),
-  sameAs: [SITE.social.instagram],
-};
-
-// Schema.org — Service
-const serviceLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Service',
-  serviceType: 'Clinical Psychology and Psychiatry',
-  provider: { '@id': `https://${SITE.domain}#org` },
-  areaServed: { '@type': 'Country', name: 'United Arab Emirates' },
-  description: 'Private 50-minute clinical psychology and psychiatry consultations at Potentia Clinics in Dubai Science Park. CBT, ACT, EMDR, Schema Therapy. In-person sessions with DHA-licensed clinicians.',
-};
+// Schema.org — MedicalClinic and Service structured data intentionally NOT included on this
+// domain (Hamza 2026-08-05). It is a machine-readable, invisible-to-visitors signal that
+// declares the business as a medical entity to any crawler, including Meta's — a direct
+// contributor to the health-category flag on potentia-landing/book.potentiaclinics.com. This
+// microsite exists purely for paid traffic (noindex candidate, no organic SEO need), so there
+// is no user- or SEO-facing cost to leaving it out. On-page copy is untouched — visitors still
+// see exactly what the clinic does. See 37C-Agency/potentia-landing for the main site's schema.
 
 // Schema.org — FAQ
 const faqLd = {
@@ -106,8 +72,6 @@ const faqLd = {
 
     <link rel="preload" as="image" href="/images/generated/hero-illustration-v2.webp" fetchpriority="high" />
 
-    <script type="application/ld+json" set:html={JSON.stringify(localBusinessLd)} />
-    <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
 
     <ClientRouter />
