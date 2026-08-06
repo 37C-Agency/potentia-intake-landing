@@ -42,11 +42,14 @@ const faqLd = {
 <!doctype html>
 <html lang="en">
   <head>
-    {/* GTM container — the ONLY tracking allowed in this codebase. Placeholder until
-        a fresh, unflagged container/pixel is set up for this domain (Hamza/Dario, TBD).
-        The GTM-W7728BNC ID from potentia-landing was deliberately NOT carried over —
-        that container's pixel is already flagged by Meta; reusing it here would flag
-        this domain too. See 2026-08-03 discussion. */}
+    {/* GTM container — the ONLY tracking allowed in this codebase. This is a fresh
+        container (account "Potentia Clinics Intake"), fresh pixel, live only on
+        intake.potentiaclinics.com — never shared with the flagged potentia-landing
+        setup. No standard "Lead" event anywhere: the thank-you-page tag fires
+        "ViewContent" and a neutrally-named Google Ads action, feeding a Custom
+        Conversion in Ads Manager, per the 2026-08-05 discussion on avoiding Meta's
+        health-category pixel restrictions. No WhatsApp widget/tags either — none
+        exists on this domain. */}
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
